@@ -24,12 +24,14 @@ uniform float _SideLength;
 // vertex input: position, uv1, uv2
 struct appdata {
     float4 vertex : POSITION;
+    float4 texcoord0 : TEXCOORD0;
     float4 texcoord1 : TEXCOORD1;
     float4 color : COLOR;
 };
  
 struct v2f {
     float4 pos : POSITION;
+    float4 texcoord0 : TEXCOORD0;
     float4 texcoord1 : TEXCOORD1;
     float4 color : COLOR;
 };
@@ -37,6 +39,7 @@ struct v2f {
 v2f vert (appdata v) {
     v2f o;
     o.pos = mul( UNITY_MATRIX_MVP, v.vertex);
+    o.texcoord0 = v.texcoord0;
     o.texcoord1 = v.texcoord1;
     o.color = v.color;
     return o;
@@ -44,25 +47,14 @@ v2f vert (appdata v) {
  
 float4 frag(v2f i ) : COLOR
 {
-//	if (i.texcoord1.x < _LineWidth ||
-//		i.texcoord1.y < _LineWidth)
-//	{
-//		return _LineColor;
-//	}
- 
-//	if ((i.texcoord1.x - i.texcoord1.y) < _LineWidth &&
-//		(i.texcoord1.y - i.texcoord1.x) < _LineWidth)
-//	{
-//		return _LineColor;
-//	}
-//	else
+
 // i.texcoord1.x > _SideLength-_LineWidth  || i.texcoord1.y > _SideLength-_LineWidth
-//	if (i.texcoord1.x < _LineWidth || i.texcoord1.y < _LineWidth ||
-//		i.texcoord1.x > _SideLength-_LineWidth || 
-//		i.texcoord1.y > _SideLength-_LineWidth) {
-	if (i.texcoord1.x < _LineWidth+.7) {
+	if (i.texcoord0.x < _LineWidth || i.texcoord0.y < _LineWidth ||
+		i.texcoord0.x > _SideLength-_LineWidth || i.texcoord0.y > _SideLength-_LineWidth ) 
+	{
 		return _LineColor;
-	} else	{
+	}
+	else {
 		return _GridColor;
 	}
 }
