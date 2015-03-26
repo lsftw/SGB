@@ -13,4 +13,4 @@ Shiliang Zhang
 Game Screenshots
 ======================
 ![Screenshot of Perlin noise generated block world viewed from first person.](/readme-images/world_demo.png?raw=true)
-3/25 - Generate cube world using Perlin noise, use built-in Unity first person package.
+3/25 - Generate cube world using Perlin noise. Uses Unity's built-in first person package.
