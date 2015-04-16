@@ -138,13 +138,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				UpdateCameraPosition (speed);
 			} else {
 				//Debug.Log ("NOT MY VIEW!");
-				float speed;
-				GetInput (out speed);
+				//float speed;
+				//GetInput (out speed);
 
 				//syncCharacter.ProgressStepCycle(syncSpeed);
 				m_CharacterController.Move (syncMoveDir * Time.fixedDeltaTime);
 
-				UpdateCameraPosition (speed);
+				//UpdateCameraPosition (speed);
 			}
         }
 
@@ -154,14 +154,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
 		{
 			if (stream.isWriting)
 			{
-
 				stream.Serialize(ref m_MoveDir);
+
 			}
 			else
 			{
-
 				stream.Serialize(ref syncMoveDir);
-
 			}
 		}
 
