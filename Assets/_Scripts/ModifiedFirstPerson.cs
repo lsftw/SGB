@@ -66,26 +66,28 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Update is called once per frame
         private void Update()
         {
-            RotateView();
-            // the jump state needs to read here to make sure it is not missed
-            if (!m_Jump)
-            {
-                m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-            }
+			if (GetComponent<NetworkView> ().isMine) {
+				//TODO test if this needs to be in if
+				RotateView ();
+			}
+			// the jump state needs to read here to make sure it is not missed
+			if (!m_Jump) {
+				m_Jump = CrossPlatformInputManager.GetButtonDown ("Jump");
+			}
+			//
+			if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) {
+				StartCoroutine (m_JumpBob.DoBobCycle ());
+				PlayLandingSound ();
+				m_MoveDir.y = 0f;
+				m_Jumping = false;
+			}
+			if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded) {
+				m_MoveDir.y = 0f;
+			}
 
-            if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
-            {
-                StartCoroutine(m_JumpBob.DoBobCycle());
-                PlayLandingSound();
-                m_MoveDir.y = 0f;
-                m_Jumping = false;
-            }
-            if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
-            {
-                m_MoveDir.y = 0f;
-            }
+			m_PreviouslyGrounded = m_CharacterController.isGrounded;
 
-            m_PreviouslyGrounded = m_CharacterController.isGrounded;
+		
         }
 
 
@@ -100,6 +102,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void FixedUpdate()
         {
 			if (GetComponent<NetworkView> ().isMine) {
+				//Debug.Log ("fixedUpdate, my view");
+				//
+				//
 				float speed;
 				GetInput (out speed);
 				// always move along the camera forward as it is the direction that it being aimed at
@@ -132,9 +137,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				ProgressStepCycle (speed);
 				UpdateCameraPosition (speed);
 			} else {
+				//Debug.Log ("NOT MY VIEW!");
+				float speed;
+				GetInput (out speed);
 
 				//syncCharacter.ProgressStepCycle(syncSpeed);
 				m_CharacterController.Move (syncMoveDir * Time.fixedDeltaTime);
+
+				UpdateCameraPosition (speed);
 			}
         }
 
@@ -144,10 +154,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
 		{
 			if (stream.isWriting)
 			{
+
 				stream.Serialize(ref m_MoveDir);
 			}
 			else
 			{
+
 				stream.Serialize(ref syncMoveDir);
 
 			}
