@@ -52,9 +52,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
 
 			m_CharacterController = GetComponent<CharacterController> ();
+
+			//so the cameras don't get swapped when joining game...
 			if (GetComponent<NetworkView> ().isMine) {
-				m_Camera = transform.Find ("FirstPersonCharacter").gameObject.GetComponent<Camera> (); // Camera.main;
+				m_Camera = GetComponentInChildren<Camera>();
+				//m_Camera = transform.Find ("FirstPersonCharacter").gameObject.GetComponent<Camera> (); // Camera.main;
 			}
+
 			m_OriginalCameraPosition = m_Camera.transform.localPosition;
 			m_FovKick.Setup (m_Camera);
 			m_HeadBob.Setup (m_Camera, m_StepInterval);
