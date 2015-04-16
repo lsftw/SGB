@@ -3,8 +3,8 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour
 {
-    private const string typeName = "UniqueGameName";
-    private const string gameName = "RoomName";
+    private const string typeName = "SGB";
+    private const string gameName = "SGB Room 1"; //Room name
 
     private bool isRefreshingHostList = false;
     private HostData[] hostList;
