@@ -31,7 +31,7 @@ public class NetworkManager : MonoBehaviour
             }
         }
     }
-
+	//
     private void StartServer()
     {
         Network.InitializeServer(5, 25000, !Network.HavePublicAddress());
