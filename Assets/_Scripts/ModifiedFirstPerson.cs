@@ -134,7 +134,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			} else {
 
 				//syncCharacter.ProgressStepCycle(syncSpeed);
-				m_CharacterController.Move (syncMoveDir * Time.fixedDeltaTime)
+				m_CharacterController.Move (syncMoveDir * Time.fixedDeltaTime);
 			}
         }
 
