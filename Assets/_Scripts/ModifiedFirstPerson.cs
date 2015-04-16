@@ -8,7 +8,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 {
     [RequireComponent(typeof (CharacterController))]
     [RequireComponent(typeof (AudioSource))]
-    public class FirstPersonController : MonoBehaviour
+    public class ModifiedFirstPerson : MonoBehaviour
     {
         [SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
@@ -41,6 +41,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+	
+
+		//private ModifiedFirstPerson syncCharacter;
+		private Vector3 syncMoveDir;
+		//private CharacterController syncCharacterController;
 
         // Use this for initialization
         private void Start()
@@ -94,42 +99,61 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void FixedUpdate()
         {
-            float speed;
-            GetInput(out speed);
-            // always move along the camera forward as it is the direction that it being aimed at
-            Vector3 desiredMove = transform.forward*m_Input.y + transform.right*m_Input.x;
+			if (GetComponent<NetworkView> ().isMine) {
+				float speed;
+				GetInput (out speed);
+				// always move along the camera forward as it is the direction that it being aimed at
+				Vector3 desiredMove = transform.forward * m_Input.y + transform.right * m_Input.x;
 
-            // get a normal for the surface that is being touched to move along it
-            RaycastHit hitInfo;
-            Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
-                               m_CharacterController.height/2f);
-            desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
+				// get a normal for the surface that is being touched to move along it
+				RaycastHit hitInfo;
+				Physics.SphereCast (transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
+                               m_CharacterController.height / 2f);
+				desiredMove = Vector3.ProjectOnPlane (desiredMove, hitInfo.normal).normalized;
 
-            m_MoveDir.x = desiredMove.x*speed;
-            m_MoveDir.z = desiredMove.z*speed;
+				m_MoveDir.x = desiredMove.x * speed;
+				m_MoveDir.z = desiredMove.z * speed;
 
 
-            if (m_CharacterController.isGrounded)
-            {
-                m_MoveDir.y = -m_StickToGroundForce;
+				if (m_CharacterController.isGrounded) {
+					m_MoveDir.y = -m_StickToGroundForce;
 
-                if (m_Jump)
-                {
-                    m_MoveDir.y = m_JumpSpeed;
-                    PlayJumpSound();
-                    m_Jump = false;
-                    m_Jumping = true;
-                }
-            }
-            else
-            {
-                m_MoveDir += Physics.gravity*m_GravityMultiplier*Time.fixedDeltaTime;
-            }
-            m_CollisionFlags = m_CharacterController.Move(m_MoveDir*Time.fixedDeltaTime);
+					if (m_Jump) {
+						m_MoveDir.y = m_JumpSpeed;
+						PlayJumpSound ();
+						m_Jump = false;
+						m_Jumping = true;
+					}
+				} else {
+					m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+				}
+				m_CollisionFlags = m_CharacterController.Move (m_MoveDir * Time.fixedDeltaTime);
 
-            ProgressStepCycle(speed);
-            UpdateCameraPosition(speed);
+				ProgressStepCycle (speed);
+				UpdateCameraPosition (speed);
+			} else {
+
+				//syncCharacter.ProgressStepCycle(syncSpeed);
+				m_CharacterController.Move (syncMoveDir * Time.fixedDeltaTime)
+			}
         }
+
+
+
+		void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
+		{
+			if (stream.isWriting)
+			{
+				stream.Serialize(ref m_MoveDir);
+			}
+			else
+			{
+				stream.Serialize(ref syncMoveDir);
+
+			}
+		}
+
+
 
 
         private void PlayJumpSound()
