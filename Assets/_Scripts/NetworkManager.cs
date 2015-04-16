@@ -4,7 +4,7 @@ using System.Collections;
 public class NetworkManager : MonoBehaviour
 {
     private const string typeName = "SGB";
-    private const string gameName = "SGB Room 1"; //Room name
+    private const string gameName = "coaxed-into-a-snafu"; //Room name
 
     private bool isRefreshingHostList = false;
     private HostData[] hostList;
