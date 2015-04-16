@@ -71,6 +71,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			} else {
 				// remove extra audio listener
 				Destroy(GetComponentInChildren<AudioListener>());
+				Destroy(GetComponentInChildren<Camera>());
 			}
         }
 
