@@ -48,6 +48,8 @@ public class Player : MonoBehaviour
         {
             InputMovement();
             InputColorChange();
+			//
+			//
         }
         else
         {
