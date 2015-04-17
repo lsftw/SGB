@@ -10,6 +10,7 @@ public class GenerateBlockWorld : MonoBehaviour {
 	public float Height = 10.0f;
 	//This divides the noise frequency
 	public float NoiseSize = 10.0f;
+
 	//Function that inputs the position and spits out a float value based on the perlin noise
 	float PerlinNoise(float x, float y) {
 		//Generate a value from the given position, position is divided to make the noise more frequent.
@@ -24,11 +25,16 @@ public class GenerateBlockWorld : MonoBehaviour {
 		blockWorld.transform.position = new Vector3 (worldSize.x / 2, 0, worldSize.y / 2);
 		for(int x = 0; x <= worldSize.x; x++) {
 			for(int y = 0; y <= worldSize.y; y++) {
-				GameObject box = GameObject.CreatePrimitive(PrimitiveType.Cube);
-				box.transform.position = new Vector3(x, PerlinNoise(x, y), y);
-				box.transform.parent = blockWorld.transform;
+				Vector3 position = new Vector3(x, PerlinNoise(x, y), y);
+				GenerateBlock(position, blockWorld.transform);
 			}
 		}
 		blockWorld.transform.position = Vector3.zero;
+	}
+
+	private void GenerateBlock(Vector3 position, Transform parent) {
+		GameObject box = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		box.transform.position = position;
+		box.transform.parent = parent;
 	}
 }

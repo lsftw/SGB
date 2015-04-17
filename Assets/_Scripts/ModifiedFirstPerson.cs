@@ -50,15 +50,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Use this for initialization
         private void Start()
         {
-
 			m_CharacterController = GetComponent<CharacterController> ();
 
 			//so the cameras don't get swapped when joining game...
 			if (GetComponent<NetworkView> ().isMine) {
 				m_Camera = GetComponentInChildren<Camera>();
-				//
-				//m_Camera = transform.Find ("FirstPersonCharacter").gameObject.GetComponent<Camera> (); // Camera.main;
-			
 
 				m_OriginalCameraPosition = m_Camera.transform.localPosition;
 				m_FovKick.Setup (m_Camera);
@@ -69,15 +65,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				m_AudioSource = GetComponent<AudioSource> ();
 				m_MouseLook.Init (transform, m_Camera.transform);
 			} else {
-				// remove extra audio listener
+				// remove extra audio listener & camera
 				Destroy(GetComponentInChildren<AudioListener>());
 				Destroy(GetComponentInChildren<Camera>());
 			}
         }
-
-		private void ChangeColor(Vector3 color) {
-			GetComponentInChildren<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
-		}
 
         // Update is called once per frame
         private void Update()
@@ -103,38 +95,42 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 				m_PreviouslyGrounded = m_CharacterController.isGrounded;
 
-				
-				//CODE FOR DESTROYING BLOCKS 
-				// - NOTE: code involving mouse clicks is updated per frame, so this belongs in Update()
-				// - NOTE: may have to propogate physics over to FixedUpdate if we want to add any...
-				// - For now, testing with raycast for individual blocks that mouse is over (ie player looking at)
-				// - May need to implement a cooldown between clicks/successful destroy commands
-				const int MAX_DISTANCE = 5;
-				RaycastHit objectHit;
-				Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
-				if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out objectHit, MAX_DISTANCE)){
-					//if they left click, objectHit will have the targeted object's data
-					//NOTE: our perlin noise blocks do not have rigidbodies. objectHit.rigidbody == Null
-					DestroyBlockAtCursor(objectHit.collider.gameObject);
-
-					//print("Hit!");
-					
-				}
-
-
+				HandleMouseClick();
 			}
-		
         }
 
+		private void ChangeColor(Vector3 color) {
+			GetComponentInChildren<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
+		}
 
+		private void HandleMouseClick() {
+			//CODE FOR DESTROYING BLOCKS 
+			// - NOTE: code involving mouse clicks is updated per frame, so this belongs in Update()
+			// - NOTE: may have to propogate physics over to FixedUpdate if we want to add any...
+			// - For now, testing with raycast for individual blocks that mouse is over (ie player looking at)
+			// - May need to implement a cooldown between clicks/successful destroy commands
+			const int MAX_DISTANCE = 5;
+			RaycastHit objectHit;
+			Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
+			if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out objectHit, MAX_DISTANCE)){
+				//if they left click, objectHit will have the targeted object's data
+				//NOTE: our perlin noise blocks do not have rigidbodies. objectHit.rigidbody == Null
+				GameObject block = objectHit.collider.gameObject;
+				DestroyBlockAtCursor(block.GetComponent<NetworkView>().viewID);
 
-		[RPC] void DestroyBlockAtCursor(GameObject block) {
-			block.SetActive(false);
+				//print("Hit!");
+				
+			}
+		}
+
+		[RPC] void DestroyBlockAtCursor(NetworkViewID blockId) {
+			//block.SetActive(false);
+			Network.Destroy(blockId);
 
 			//GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
 			
 			if (GetComponent<NetworkView>().isMine)
-				GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, block);
+				GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, blockId);
 		}
 
 
@@ -192,7 +188,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				//UpdateCameraPosition (speed);
 			}
         }
-
 
 
 		void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
