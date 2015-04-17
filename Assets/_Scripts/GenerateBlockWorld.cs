@@ -3,9 +3,10 @@ using System.Collections;
 
 // Code adapted from answers.unity3d.com/questions/261023/block-based-map-generator.html
 public class GenerateBlockWorld : MonoBehaviour {
-	public Vector2 worldSize = new Vector2(10, 10);
 	private GameObject blockWorld; // parent for all blocks
+	public GameObject prefabBlock;
 
+	public Vector2 worldSize = new Vector2(10, 10);
 	//Height multiplies the final noise output
 	public float Height = 10.0f;
 	//This divides the noise frequency
@@ -33,8 +34,9 @@ public class GenerateBlockWorld : MonoBehaviour {
 	}
 
 	private void GenerateBlock(Vector3 position, Transform parent) {
-		GameObject box = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		box.transform.position = position;
+		//GameObject box = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		GameObject box = (GameObject)Instantiate(prefabBlock, position, Quaternion.identity);
+		//box.transform.position = position;
 		box.transform.parent = parent;
 	}
 }
