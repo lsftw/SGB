@@ -109,21 +109,33 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				// - NOTE: may have to propogate physics over to FixedUpdate if we want to add any...
 				// - For now, testing with raycast for individual blocks that mouse is over (ie player looking at)
 				// - May need to implement a cooldown between clicks/successful destroy commands
-				
 				const int MAX_DISTANCE = 5;
 				RaycastHit objectHit;
 				Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
 				if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out objectHit, MAX_DISTANCE)){
 					//if they left click, objectHit will have the targeted object's data
 					//NOTE: our perlin noise blocks do not have rigidbodies. objectHit.rigidbody == Null
+					DestroyBlockAtCursor(objectHit.collider.gameObject);
 
-					objectHit.collider.gameObject.SetActive(false);
 					//print("Hit!");
-
+					
 				}
+
+
 			}
 		
         }
+
+
+
+		[RPC] void DestroyBlockAtCursor(GameObject block) {
+			block.SetActive(false);
+
+			//GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
+			
+			if (GetComponent<NetworkView>().isMine)
+				GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, block);
+		}
 
 
         private void PlayLandingSound()
