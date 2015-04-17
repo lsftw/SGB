@@ -114,20 +114,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
 			if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out objectHit, MAX_DISTANCE)){
 				//if they left click, objectHit will have the targeted object's data
-				//NOTE: our perlin noise blocks do not have rigidbodies. objectHit.rigidbody == Null
 				GameObject block = objectHit.collider.gameObject;
-				DestroyBlockAtCursor(block.GetComponent<NetworkView>().viewID);
-
-				//print("Hit!");
-				
+				DestroyBlockAtCursor(block);
+				//DestroyBlockAtCursor(block.GetComponent<NetworkView>().viewID);
 			}
 		}
 
+		// old non-rpc version
+		void DestroyBlockAtCursor(GameObject block) {
+			block.SetActive(false);
+		}
+
+		// TODO get working, blockId seems to always be 0?
 		[RPC] void DestroyBlockAtCursor(NetworkViewID blockId) {
 			//block.SetActive(false);
 			Network.Destroy(blockId);
-
-			//GetComponent<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
 			
 			if (GetComponent<NetworkView>().isMine)
 				GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, blockId);

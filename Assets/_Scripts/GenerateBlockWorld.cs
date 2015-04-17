@@ -27,7 +27,8 @@ public class GenerateBlockWorld : MonoBehaviour {
 		for(int x = 0; x <= worldSize.x; x++) {
 			for(int y = 0; y <= worldSize.y; y++) {
 				Vector3 position = new Vector3(x, PerlinNoise(x, y), y);
-				GenerateBlock(position, blockWorld.transform);
+				//GenerateBlock(position, blockWorld.transform);
+				GeneratePrimitiveBlock(position, blockWorld.transform);
 			}
 		}
 		blockWorld.transform.position = Vector3.zero;
@@ -37,6 +38,11 @@ public class GenerateBlockWorld : MonoBehaviour {
 		//GameObject box = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		GameObject box = (GameObject)Instantiate(prefabBlock, position, Quaternion.identity);
 		//box.transform.position = position;
+		box.transform.parent = parent;
+	}
+	private void GeneratePrimitiveBlock(Vector3 position, Transform parent) {
+		GameObject box = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		box.transform.position = position;
 		box.transform.parent = parent;
 	}
 }
