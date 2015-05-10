@@ -20,18 +20,26 @@ public class GenerateBlockWorld : MonoBehaviour {
 		return noise * Height;
 	}
 
+	bool ShouldGenerate() {
+		return Network.isServer;
+	}
+
 	// Use this for initialization
 	void Start () {
-		blockWorld = new GameObject ("Terrain");
-		blockWorld.transform.position = new Vector3 (worldSize.x / 2, 0, worldSize.y / 2);
-		for(int x = 0; x <= worldSize.x; x++) {
-			for(int y = 0; y <= worldSize.y; y++) {
-				Vector3 position = new Vector3(x, PerlinNoise(x, y), y);
-				//GenerateBlock(position, blockWorld.transform);
-				GeneratePrimitiveBlock(position, blockWorld.transform);
+		Debug.Log("isServer:" + Network.isServer);
+		Debug.Log("isClient:" + Network.isClient);
+		if (ShouldGenerate()) {
+			blockWorld = new GameObject ("Terrain");
+			blockWorld.transform.position = new Vector3 (worldSize.x / 2, 0, worldSize.y / 2);
+			for(int x = 0; x <= worldSize.x; x++) {
+				for(int y = 0; y <= worldSize.y; y++) {
+					Vector3 position = new Vector3(x, PerlinNoise(x, y), y);
+					GenerateBlock(position, blockWorld.transform);
+					//GeneratePrimitiveBlock(position, blockWorld.transform);
+				}
 			}
+			blockWorld.transform.position = Vector3.zero;
 		}
-		blockWorld.transform.position = Vector3.zero;
 	}
 
 	private void GenerateBlock(Vector3 position, Transform parent) {

@@ -9,6 +9,7 @@ public class NetworkManager : MonoBehaviour
     private bool isRefreshingHostList = false;
     private HostData[] hostList;
 
+	public GameObject worldGeneratorPrefab;
     public GameObject playerPrefab;
 
     void OnGUI()
@@ -43,8 +44,19 @@ public class NetworkManager : MonoBehaviour
     void OnServerInitialized()
     {
         SpawnPlayer();
+		GenerateWorld();
     }
 
+    private void JoinServer(HostData hostData)
+    {
+        Network.Connect(hostData);
+    }
+
+    void OnConnectedToServer()
+    {
+        SpawnPlayer();
+		GenerateWorld();
+    }
 
     void Update()
     {
@@ -64,18 +76,10 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-
-    private void JoinServer(HostData hostData)
-    {
-        Network.Connect(hostData);
-    }
-
-    void OnConnectedToServer()
-    {
-        SpawnPlayer();
-    }
-
-
+	private void GenerateWorld()
+	{
+		Instantiate(worldGeneratorPrefab, new Vector3(0,0,0), Quaternion.identity);
+	}
     private void SpawnPlayer()
     {
         Network.Instantiate(playerPrefab, Vector3.up * 15, Quaternion.identity, 0);
