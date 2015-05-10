@@ -12,6 +12,8 @@ public class GenerateBlockWorld : MonoBehaviour {
 	//This divides the noise frequency
 	public float NoiseSize = 10.0f;
 
+	public int LowestHeight = -5; // Lowest height of block, generates block until that height
+
 	//Function that inputs the position and spits out a float value based on the perlin noise
 	float PerlinNoise(float x, float y) {
 		//Generate a value from the given position, position is divided to make the noise more frequent.
@@ -20,21 +22,26 @@ public class GenerateBlockWorld : MonoBehaviour {
 		return noise * Height;
 	}
 
-	bool ShouldGenerate() {
-		return Network.isServer;
-	}
-
 	// Use this for initialization
 	void Start () {
+		GenerateWorld();
+	}
+	bool ShouldGenerate() {
 		Debug.Log("isServer:" + Network.isServer);
 		Debug.Log("isClient:" + Network.isClient);
+		return Network.isServer;
+	}
+	void GenerateWorld() {
 		if (ShouldGenerate()) {
 			blockWorld = new GameObject ("Terrain");
 			blockWorld.transform.position = new Vector3 (worldSize.x / 2, 0, worldSize.y / 2);
-			for(int x = 0; x <= worldSize.x; x++) {
-				for(int y = 0; y <= worldSize.y; y++) {
-					Vector3 position = new Vector3(x, PerlinNoise(x, y), y);
-					GenerateBlock(position, blockWorld.transform);
+			for (int x = 0; x <= worldSize.x; x++) {
+				for (int y = 0; y <= worldSize.y; y++) {
+					float z = PerlinNoise(x, y);
+					for (float curHeight = z; curHeight > LowestHeight; curHeight--) {
+						Vector3 position = new Vector3(x, curHeight, y);
+						GenerateBlock(position, blockWorld.transform);
+					}
 					//GeneratePrimitiveBlock(position, blockWorld.transform);
 				}
 			}
