@@ -10,6 +10,8 @@ Alex Yee
 
 Shiliang Zhang
 
+[Play in Browser (requires Unity plugin)](http://lsftw.github.io/SGB/game.html)
+
 Game Screenshots
 ======================
 ![Screenshot of Perlin noise generated block world viewed from first person.](/readme-images/world_demo.png?raw=true)  
