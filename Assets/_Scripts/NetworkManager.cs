@@ -3,8 +3,14 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour
 {
-    private const string typeName = "SGB";
-    private const string gameName = "coaxed-into-a-snafu"; //Room name
+    private const string GAME_NAME = "SGB";
+    private const string ROOM_NAME = "coaxed-into-a-snafu";
+
+	// if true, waits for a client to connect to server before initializing game
+	// necessary for multiplayer Network.Instantiate of block world to work
+	// (since if a client connects after server world instantiation, they don't receive any instantiate calls)
+	public const bool WAIT_FOR_TWO_PLAYERS = true;
+	private bool waitingForAnotherPlayer;
 
     private bool isRefreshingHostList = false;
     private HostData[] hostList;
@@ -36,16 +42,32 @@ public class NetworkManager : MonoBehaviour
     private void StartServer()
     {
         Network.InitializeServer(5, 25000, !Network.HavePublicAddress());
-        MasterServer.RegisterHost(typeName, gameName);
+        MasterServer.RegisterHost(GAME_NAME, ROOM_NAME);
 		//
 		//
     }
 
     void OnServerInitialized()
     {
-        SpawnPlayer();
-		GenerateWorld();
+		if (WAIT_FOR_TWO_PLAYERS) {
+			waitingForAnotherPlayer = true;
+			// TODO show gui text about waiting for player
+			//GUI.Button(new Rect(200, 200, 250, 100), "Start Server")
+		} else {
+			StartGame();
+		}
     }
+    void OnPlayerConnected(NetworkPlayer player) {
+		//Debug.Log("Player " + playerCount++ + " connected from " + player.ipAddress + ":" + player.port);
+		if (WAIT_FOR_TWO_PLAYERS && waitingForAnotherPlayer) {
+			waitingForAnotherPlayer = false;
+			StartGame();
+		}
+    }
+	void StartGame() {
+		SpawnPlayer();
+		GenerateWorld();
+	}
 
     private void JoinServer(HostData hostData)
     {
@@ -54,8 +76,7 @@ public class NetworkManager : MonoBehaviour
 
     void OnConnectedToServer()
     {
-        SpawnPlayer();
-		GenerateWorld();
+        StartGame();
     }
 
     void Update()
@@ -72,7 +93,7 @@ public class NetworkManager : MonoBehaviour
         if (!isRefreshingHostList)
         {
             isRefreshingHostList = true;
-            MasterServer.RequestHostList(typeName);
+            MasterServer.RequestHostList(GAME_NAME);
         }
     }
 
