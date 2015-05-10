@@ -44,5 +44,11 @@ public class GenerateBlockWorld : MonoBehaviour {
 		GameObject box = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		box.transform.position = position;
 		box.transform.parent = parent;
+		// Need to set mesh renderer/shader manually or blocks will appear solid pink when game is exported
+		setDefaultMaterial(box);
+	}
+	private void setDefaultMaterial(GameObject primitiveBlock) {
+		MeshRenderer mr = primitiveBlock.GetComponent<MeshRenderer>();
+		mr.material = new Material(Shader.Find("Diffuse"));
 	}
 }
