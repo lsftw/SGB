@@ -4,6 +4,10 @@ using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
 
+/**
+ * Modified version of FirstPersonController from Unity standard assets.
+ * Modified to send input over network.
+ */
 namespace UnityStandardAssets.Characters.FirstPerson
 {
     [RequireComponent(typeof (CharacterController))]
@@ -115,23 +119,26 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out objectHit, MAX_DISTANCE)){
 				//if they left click, objectHit will have the targeted object's data
 				GameObject block = objectHit.collider.gameObject;
-				DestroyBlockAtCursor(block);
-				//DestroyBlockAtCursor(block.GetComponent<NetworkView>().viewID);
+				DestroyEntity(block);
 			}
 		}
 
 		// old non-rpc version
-		void DestroyBlockAtCursor(GameObject block) {
-			block.SetActive(false);
-		}
+		// void DestroyBlockAtCursor(GameObject block) {
+			// block.SetActive(false);
+		// }
 
-		// TODO get working, blockId seems to always be 0?
-		[RPC] void DestroyBlockAtCursor(NetworkViewID blockId) {
+		void DestroyEntity(GameObject entity) {
+			// only allow destroying blocks
+			if (entity.tag == "Block") { // YOU CAN USE == FOR STRING EQUALITY C# MVP
+				DestroyBlock(entity.GetComponent<NetworkView>().viewID);
+			}
+		}
+		[RPC] void DestroyBlock(NetworkViewID blockId) {
 			//block.SetActive(false);
 			Network.Destroy(blockId);
-			
-			if (GetComponent<NetworkView>().isMine)
-				GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, blockId);
+			// if (GetComponent<NetworkView>().isMine)
+				// GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, blockId);
 		}
 
 

@@ -1,6 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
+/**
+ * Handles basic server/client connection.
+ * Delays world generation/player spawning until two players are on same server.
+ * That way, Network.Instantiate is sent to ALL players, since both players are connected when world spawns.
+ */
 public class NetworkManager : MonoBehaviour
 {
     private const string GAME_NAME = "SGB";
@@ -17,6 +23,7 @@ public class NetworkManager : MonoBehaviour
 
 	public GameObject worldGeneratorPrefab;
     public GameObject playerPrefab;
+	public Text textDisplay;
 
     void OnGUI()
     {
@@ -52,7 +59,7 @@ public class NetworkManager : MonoBehaviour
 		if (WAIT_FOR_TWO_PLAYERS) {
 			waitingForAnotherPlayer = true;
 			// TODO show gui text about waiting for player
-			//GUI.Button(new Rect(200, 200, 250, 100), "Start Server")
+			//GUI.Text(new Rect(200, 200, 250, 100), "Start Server");
 		} else {
 			StartGame();
 		}
@@ -86,7 +93,17 @@ public class NetworkManager : MonoBehaviour
             isRefreshingHostList = false;
             hostList = MasterServer.PollHostList();
         }
+		UpdateGuiText();
     }
+	void UpdateGuiText()
+	{
+		if (WAIT_FOR_TWO_PLAYERS && waitingForAnotherPlayer) {
+			textDisplay.text = "Waiting for another player to connect...\n" + 
+				"Your Room Name: " + ROOM_NAME;
+		} else {
+			textDisplay.text = "";
+		}
+	}
 
     private void RefreshHostList()
     {
