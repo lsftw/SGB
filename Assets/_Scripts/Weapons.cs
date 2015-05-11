@@ -6,7 +6,7 @@ using System.Linq;
 public enum Weapon {
 	HAND, // melee, single block destruction
 	DRILL, // melee, multiple block destruction
-	CODE425 // melee but high ranged, I am become Death, destroyer of Blocks
+	CODE425 // high ranged, I am become Death, destroyer of Blocks
 };
 // Handles weapon selection for a single player
 public class Weapons : MonoBehaviour {
@@ -58,7 +58,7 @@ public class Weapons : MonoBehaviour {
 			ExplodeMultipleFromCursor(5, .5f);
 			break;
 			case Weapon.CODE425:
-			GameObject blockTarget = GetOneFromCursor(15);
+			GameObject blockTarget = GetOneFromCursor(50);
 			if (blockTarget != null) {
 				Vector3 origin = raycastCamera.gameObject.transform.position;
 				Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
