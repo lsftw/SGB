@@ -72,12 +72,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				// Used for text display
 				gameObject.tag = "Player";
 				// Configure weapons
-				weapons = gameObject.AddComponent<Weapons>();
+				// weapons = gameObject.AddComponent<Weapons>();
+				weapons = gameObject.GetComponent<Weapons>();
 				weapons.setCamera(m_Camera);
 			} else {
 				// remove extra audio listener & camera
 				Destroy(GetComponentInChildren<AudioListener>());
 				Destroy(GetComponentInChildren<Camera>());
+				Destroy(GetComponentInChildren<Weapons>());
 			}
         }
 
