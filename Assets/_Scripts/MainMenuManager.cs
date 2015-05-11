@@ -34,7 +34,7 @@ public class MainMenuManager : MonoBehaviour {
 	public Button Joining_CancelButton;
 	public Button Joining_RefreshHostsButton;
 
-	void DisplayCanvas(GameObject panel){
+	void DisableAllCanvasPanels(){
 		Main_Canvas_Panel.SetActive (false);
 		Transform[] tarr = Main_Canvas_Panel.transform.GetComponentsInChildren<Transform> ();
 		foreach (Transform t in tarr) {
@@ -50,9 +50,13 @@ public class MainMenuManager : MonoBehaviour {
 		foreach (Transform t in tarr) {
 			t.gameObject.SetActive(false);
 		}
-		//
+	}
+
+	void DisplayCanvas(GameObject panel){
+		DisableAllCanvasPanels ();
+
 		//enable all children of the active canvas
-		tarr = panel.transform.GetComponentsInChildren<Transform> ();
+		Transform[] tarr = panel.transform.GetComponentsInChildren<Transform> ();
 		foreach (Transform t in tarr) {
 			t.gameObject.SetActive(true);
 		}
@@ -74,13 +78,29 @@ public class MainMenuManager : MonoBehaviour {
 		//
 		Joining_CancelButton.onClick.AddListener (CancelJoin);
 		Joining_RefreshHostsButton.onClick.AddListener(RefreshHostList);
+		//
+		//
+		//
 	}
 	void Quit (){
 		Application.Quit ();
 	}
-	/*
+
 	void OnGUI()
 	{
+		if (Joining_Canvas_Panel.activeSelf) {
+			if (!Network.isClient && !Network.isServer) {
+				if (hostList != null) {
+					for (int i = 0; i < hostList.Length; i++) {
+						if (GUI.Button (new Rect (600, 110 + (110 * i), 250, 100), hostList [i].gameName))
+							JoinServer (hostList [i]);
+					}
+				}
+				//
+			}
+		}
+		//
+		/*
 		if (!Network.isClient && !Network.isServer)
 		{
 			if (GUI.Button(new Rect(100, 100, 250, 100), "Start Server"))
@@ -99,7 +119,8 @@ public class MainMenuManager : MonoBehaviour {
 			}
 			//
 		}
-	} */
+		*/
+	} 
 	//
 	/*void testDebug(){
 		Debug.Log ("clicked button!");
@@ -111,8 +132,6 @@ public class MainMenuManager : MonoBehaviour {
 		DisplayCanvas (Hosting_Canvas_Panel);
 		Hosting_StartButton.interactable = false;
 		//
-		//
-		
 	}
 	private void CloseServer(){
 		Network.Disconnect ();
@@ -129,6 +148,7 @@ public class MainMenuManager : MonoBehaviour {
 			waitingForAnotherPlayer = true;
 			Hosting_StartButton.interactable = false; //can't click start until another player joins
 			//GUI.Text(new Rect(200, 200, 250, 100), "Start Server");
+			//
 		} /*else {
 			StartGame();
 		}*/
@@ -137,9 +157,11 @@ public class MainMenuManager : MonoBehaviour {
 		//Debug.Log("Player " + playerCount++ + " connected from " + player.ipAddress + ":" + player.port);
 		if (WAIT_FOR_TWO_PLAYERS && waitingForAnotherPlayer) {
 			waitingForAnotherPlayer = false;
-			//TODO Enable start button
-			Hosting_StartButton.interactable = true;
-			//StartGame();
+			//TODO do we need start button at all? just starting immediately for now
+			// Enable start button
+			//Hosting_StartButton.interactable = true;
+			DisableAllCanvasPanels();
+			StartGame();
 		}
 	}
 	void StartGame() {
@@ -150,16 +172,22 @@ public class MainMenuManager : MonoBehaviour {
 	}
 	private void JoinServer(HostData hostData)
 	{
+		//Debug.Log ("Joining server!");
+		DisableAllCanvasPanels ();
 		Network.Connect(hostData);
 	}
 	
 	void OnConnectedToServer()
 	{
+		//DisplayCanvas (Hosting_Canvas_Panel);
+		//Hosting_StartButton.interactable = false; //false for the joining party
 		StartGame();
 	}
 	
 	void Update()
 	{
+		//
+		//
 		//if (Hosting_Canvas_Panel.activeSelf) {
 		if (isRefreshingHostList && MasterServer.PollHostList ().Length > 0) {
 			isRefreshingHostList = false;
@@ -193,26 +221,20 @@ public class MainMenuManager : MonoBehaviour {
 			hostList = MasterServer.PollHostList ();
 
 		}
-		if (hostList != null)
+		/*if (hostList != null)
 		{
-			Debug.Log ("hostList!= null");
+
 			for (int i = 0; i < hostList.Length; i++)
 			{
 				//TODO make buttons more like UI
 				Debug.Log ("i = " + i + "hostList[i].gameName = "+hostList[i].gameName);
-				//Joining_Canvas_Panel
-				GameObject jb = GUI.Button(new Rect(500, 100, 300, 100), hostList[i].gameName);
-				jb.transform.SetParent(Joining_Canvas_Panel.transform, false);
-				/*Button joinButton = (Button) jb;
-				joinButton.onClick.AddListener(delegate {JoinServer(hostList[i]);});
-				joinButton.gameObject.SetActive(true);
-				joinButton.interactable = true;*/
-			
-				/*if (GUI.Button(new Rect(100, 100 + (110 * i), 300, 100), hostList[i].gameName))
+
+				if (GUI.Button(new Rect(300, 100 + (110 * i), 300, 100), hostList[i].gameName))
 					JoinServer(hostList[i]);
-					*/
+				
+				//
 			}
-		}
+		}*/
 	}
 	
 	private void GenerateWorld()
