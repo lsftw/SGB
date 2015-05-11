@@ -19,27 +19,37 @@ public class Weapons : MonoBehaviour {
 	private Camera raycastCamera;
 	// Ammo: Negative numbers mean unlimited ammo
 	private Dictionary<Weapon, int> ammo = new Dictionary<Weapon, int>();
+	private Dictionary<Weapon, double> COOLDOWNS = new Dictionary<Weapon, double>();
 	private Dictionary<Weapon, double> cooldown = new Dictionary<Weapon, double>();
 
+	private Weapon[] GetAllWeapons() {
+		return (Weapon[])System.Enum.GetValues(typeof(Weapon));
+	}
 	public Weapons() {
 		ammo.Add(Weapon.HAND, -1);
-		cooldown.Add(Weapon.HAND, .25);
+		COOLDOWNS.Add(Weapon.HAND, .25);
 		ammo.Add(Weapon.DRILL, -1);
-		// cooldown.Add(Weapon., );
+		COOLDOWNS.Add(Weapon.DRILL, .35);
 		ammo.Add(Weapon.PELLET, 300);
-		// cooldown.Add(Weapon., );
+		COOLDOWNS.Add(Weapon.PELLET, .5);
 		ammo.Add(Weapon.CODE425, 1);
-		// cooldown.Add(Weapon., );
+		COOLDOWNS.Add(Weapon.CODE425, 5);
 		ammo.Add(Weapon.ICARUS, -1);
-		// cooldown.Add(Weapon., );
+		COOLDOWNS.Add(Weapon.ICARUS, 30);
+		foreach (Weapon weapon in GetAllWeapons()) {
+			cooldown.Add(weapon, 0);
+		}
 	}
 	public bool TryFiring() {
-		if (ammo[selectedWeapon] == 0) {
+		bool haveAmmo = ammo[selectedWeapon] != 0;
+		bool offCooldown = cooldown[selectedWeapon] <= 0;
+		if (!haveAmmo || !offCooldown) {
 			return false;
 		} else {
 			if (ammo[selectedWeapon] > 0) {
 				ammo[selectedWeapon]--;
 			}
+			cooldown[selectedWeapon] += COOLDOWNS[selectedWeapon];
 			return true;
 		}
 	}
@@ -58,8 +68,19 @@ public class Weapons : MonoBehaviour {
 	}
 
 	void Update() {
+		CooldownWeapons(Time.deltaTime);
 		HandleWeaponSwap();
 		HandleMouseClick();
+	}
+
+	private void CooldownWeapons(float amount) {
+		Weapon[] weapons = (Weapon[])System.Enum.GetValues(typeof(Weapon));
+		foreach (Weapon weapon in weapons) {
+			cooldown[weapon] -= amount;
+			if (cooldown[weapon] < 0) {
+				cooldown[weapon] = 0;
+			}
+		}
 	}
 
 	private void HandleWeaponSwap() {
@@ -75,45 +96,43 @@ public class Weapons : MonoBehaviour {
 		// - NOTE: may have to propogate physics over to FixedUpdate if we want to add any...
 		// - For now, testing with raycast for individual blocks that mouse is over (ie player looking at)
 		// - May need to implement a cooldown between clicks/successful destroy commands
-		if (Input.GetMouseButtonDown(0)) {
+		if (Input.GetMouseButton(0)) {
 			FireWeapon();
 		}
 	}
 
 	private void FireWeapon() {
-		switch (selectedWeapon) {
-			case Weapon.HAND:
-			DestroyOneFromCursor(5);
-			break;
-			case Weapon.DRILL:
-			ExplodeMultipleFromCursor(5, .5f);
-			break;
-			case Weapon.PELLET:
-			if (TryFiring()) {
+		if (TryFiring()) {
+			switch (selectedWeapon) {
+				case Weapon.HAND:
+				DestroyOneFromCursor(5);
+				break;
+				case Weapon.DRILL:
+				ExplodeMultipleFromCursor(5, .5f);
+				break;
+				case Weapon.PELLET:
 				GameObject blockTarget = GetOneFromCursor(1000);
 				if (blockTarget != null) {
 					Vector3 origin = raycastCamera.gameObject.transform.position;
 					Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
 					FirePellet(origin, target);
 				}
-			}
-			break;
-			case Weapon.CODE425:
-			if (TryFiring()) {
-				GameObject blockTarget = GetOneFromCursor(1000);
+				break;
+				case Weapon.CODE425:
+				blockTarget = GetOneFromCursor(1000);
 				if (blockTarget != null) {
 					Vector3 origin = raycastCamera.gameObject.transform.position;
 					Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
 					FireCode425(origin, target);
 				}
+				break;
+				case Weapon.ICARUS:
+				gameObject.transform.position = new Vector3(0, 100, 0);
+				break;
+				default:
+				Debug.Log("Unrecognized weapon: " + selectedWeapon);
+				break;
 			}
-			break;
-			case Weapon.ICARUS:
-			gameObject.transform.position = new Vector3(0, 100, 0);
-			break;
-			default:
-			Debug.Log("Unrecognized weapon: " + selectedWeapon);
-			break;
 		}
 	}
 
