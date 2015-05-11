@@ -1,23 +1,25 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Linq;
 
 public enum Weapon {
 	HAND, // melee, single block destruction
-	DRILL // melee, multiple block destruction
+	DRILL, // melee, multiple block destruction
+	CODE425 // melee but high ranged, I am become Death, destroyer of Blocks
 };
 // Handles weapon selection for a single player
 public class Weapons : MonoBehaviour {
 	private Weapon selectedWeapon = Weapon.HAND;
-	private Camera camera;
+	private Camera raycastCamera;
 
 	// Used for GUI text display of selected weapon
 	public string getSelectedWeapon() {
 		return selectedWeapon.ToString();
 	}
 	// TODO use constructor instead? Camera is mandatory for raycasting
-	public void setCamera(Camera camera) {
-		this.camera = camera;
+	public void setCamera(Camera raycastCamera) {
+		this.raycastCamera = raycastCamera;
 	}
 
 	void Start() {
@@ -52,9 +54,10 @@ public class Weapons : MonoBehaviour {
 			DestroyOneFromCursor(5);
 			break;
 			case Weapon.DRILL:
-			for (int i = 0; i < 3; i++) {
-				DestroyOneFromCursor(5);
-			}
+			ExplodeMultipleFromCursor(5, .5f);
+			break;
+			case Weapon.CODE425:
+			ExplodeMultipleFromCursor(15, 7f);
 			break;
 			default:
 			Debug.Log("Unrecognized weapon: " + selectedWeapon);
@@ -62,20 +65,26 @@ public class Weapons : MonoBehaviour {
 		}
 	}
 
+	private void ExplodeMultipleFromCursor(int maxDistance, float radius) {
+		RaycastHit objectHit;
+		Ray ray = raycastCamera.ScreenPointToRay(Input.mousePosition);
+		if (Physics.Raycast(ray, out objectHit, maxDistance)) {
+			//if they left click, objectHit will have the targeted object's data
+			GameObject initialBlock = objectHit.collider.gameObject;
+			foreach (GameObject block in GetAllInRange(initialBlock, radius)) {
+				DestroyEntity(block);
+			}
+		}
+	}
 	private void DestroyOneFromCursor(int maxDistance) {
 		RaycastHit objectHit;
-		Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out objectHit, maxDistance)){
+		Ray ray = raycastCamera.ScreenPointToRay(Input.mousePosition);
+		if (Physics.Raycast(ray, out objectHit, maxDistance)) {
 			//if they left click, objectHit will have the targeted object's data
 			GameObject block = objectHit.collider.gameObject;
 			DestroyEntity(block);
 		}
 	}
-
-	// old non-rpc version
-	// void DestroyBlockAtCursor(GameObject block) {
-		// block.SetActive(false);
-	// }
 
 	void DestroyEntity(GameObject entity) {
 		// only allow destroying blocks
@@ -84,9 +93,11 @@ public class Weapons : MonoBehaviour {
 		}
 	}
 	[RPC] void DestroyBlock(NetworkViewID blockId) {
-		//block.SetActive(false);
 		Network.Destroy(blockId);
-		// if (GetComponent<NetworkView>().isMine)
-			// GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, blockId);
 	}
+	System.Collections.Generic.IEnumerable<GameObject> GetAllInRange(GameObject centerObject, float radius) {
+		Vector3 center = centerObject.GetComponent<Renderer>().bounds.center;
+        Collider[] colliders = Physics.OverlapSphere(center, radius);
+		return colliders.Select(collider => collider.gameObject);
+    }
 }
