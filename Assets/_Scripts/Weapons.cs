@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 
@@ -12,14 +13,42 @@ public enum Weapon {
 };
 // Handles weapon selection for a single player
 public class Weapons : MonoBehaviour {
-	private Weapon selectedWeapon = Weapon.HAND;
-	private Camera raycastCamera;
 	public GameObject prefabPellet;
 	public GameObject prefabCode425;
+	private Weapon selectedWeapon = Weapon.HAND;
+	private Camera raycastCamera;
+	// Ammo: Negative numbers mean unlimited ammo
+	private Dictionary<Weapon, int> ammo = new Dictionary<Weapon, int>();
 
+	public Weapons() {
+		ammo.Add(Weapon.HAND, -1);
+		ammo.Add(Weapon.DRILL, -1);
+		ammo.Add(Weapon.PELLET, 300);
+		ammo.Add(Weapon.CODE425, 1);
+		ammo.Add(Weapon.ICARUS, -1);
+	}
+	public bool TryFiring() {
+		if (ammo[selectedWeapon] == 0) {
+			return false;
+		} else {
+			if (ammo[selectedWeapon] > 0) {
+				ammo[selectedWeapon]--;
+			}
+			return true;
+		}
+		// int curAmmo;
+		// if (ammo.TryGetValue(selectedWeapon, out curAmmo)) {
+			// ammo[selectedWeapon] = curAmmo - 1;
+		// }
+	}
 	// Used for GUI text display of selected weapon
-	public string getSelectedWeapon() {
-		return selectedWeapon.ToString();
+	public string GetWeaponDescription() {
+		string weaponName = selectedWeapon.ToString();
+		string ammoText = ammo[selectedWeapon].ToString();
+		if (ammo[selectedWeapon] < 0) {
+			return string.Format("{0}", weaponName);
+		}
+		return string.Format("{0} x{1}", weaponName, ammoText);
 	}
 	// TODO use constructor instead? Camera is mandatory for raycasting
 	public void setCamera(Camera raycastCamera) {
@@ -61,19 +90,23 @@ public class Weapons : MonoBehaviour {
 			ExplodeMultipleFromCursor(5, .5f);
 			break;
 			case Weapon.PELLET:
-			GameObject blockTarget = GetOneFromCursor(1000);
-			if (blockTarget != null) {
-				Vector3 origin = raycastCamera.gameObject.transform.position;
-				Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
-				FirePellet(origin, target);
+			if (TryFiring()) {
+				GameObject blockTarget = GetOneFromCursor(1000);
+				if (blockTarget != null) {
+					Vector3 origin = raycastCamera.gameObject.transform.position;
+					Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
+					FirePellet(origin, target);
+				}
 			}
 			break;
 			case Weapon.CODE425:
-			blockTarget = GetOneFromCursor(1000);
-			if (blockTarget != null) {
-				Vector3 origin = raycastCamera.gameObject.transform.position;
-				Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
-				FireCode425(origin, target);
+			if (TryFiring()) {
+				GameObject blockTarget = GetOneFromCursor(1000);
+				if (blockTarget != null) {
+					Vector3 origin = raycastCamera.gameObject.transform.position;
+					Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
+					FireCode425(origin, target);
+				}
 			}
 			break;
 			case Weapon.ICARUS:
