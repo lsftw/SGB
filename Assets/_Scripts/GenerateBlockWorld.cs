@@ -12,14 +12,14 @@ public class GenerateBlockWorld : MonoBehaviour {
 	//This divides the noise frequency
 	public float NoiseSize = 10.0f;
 
-	public int LowestHeight = -5; // Lowest height of block, generates block until that height
+	public int LowestHeight = 0; // Lowest height of block, generates block until that height
 
 	//Function that inputs the position and spits out a float value based on the perlin noise
 	float PerlinNoise(float x, float y) {
 		//Generate a value from the given position, position is divided to make the noise more frequent.
 		float noise = Mathf.PerlinNoise(x / NoiseSize, y / NoiseSize);
 		//Return the noise value
-		return noise * Height;
+		return noise * Height - LowestHeight;
 	}
 
 	// Use this for initialization
@@ -27,8 +27,8 @@ public class GenerateBlockWorld : MonoBehaviour {
 		GenerateWorld();
 	}
 	bool ShouldGenerate() {
-		Debug.Log("isServer:" + Network.isServer);
-		Debug.Log("isClient:" + Network.isClient);
+		// Debug.Log("isServer:" + Network.isServer);
+		// Debug.Log("isClient:" + Network.isClient);
 		return Network.isServer;
 	}
 	void GenerateWorld() {
