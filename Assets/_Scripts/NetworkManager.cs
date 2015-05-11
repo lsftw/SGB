@@ -43,6 +43,7 @@ public class NetworkManager : MonoBehaviour
                         JoinServer(hostList[i]);
                 }
             }
+			//
         }
     }
 	//
@@ -52,6 +53,7 @@ public class NetworkManager : MonoBehaviour
         MasterServer.RegisterHost(GAME_NAME, ROOM_NAME);
 		//
 		//
+
     }
 
     void OnServerInitialized()
@@ -60,9 +62,9 @@ public class NetworkManager : MonoBehaviour
 			waitingForAnotherPlayer = true;
 			// TODO show gui text about waiting for player
 			//GUI.Text(new Rect(200, 200, 250, 100), "Start Server");
-		} else {
+		} /*else {
 			StartGame();
-		}
+		}*/
     }
     void OnPlayerConnected(NetworkPlayer player) {
 		//Debug.Log("Player " + playerCount++ + " connected from " + player.ipAddress + ":" + player.port);
@@ -74,6 +76,8 @@ public class NetworkManager : MonoBehaviour
 	void StartGame() {
 		SpawnPlayer();
 		GenerateWorld();
+		//textDisplay = GetComponent<Canvas> ().GetComponent<"CenterText">;
+		//
 	}
 
     private void JoinServer(HostData hostData)
@@ -120,6 +124,8 @@ public class NetworkManager : MonoBehaviour
 	}
     private void SpawnPlayer()
     {
-        Network.Instantiate(playerPrefab, Vector3.up * 15, Quaternion.identity, 0);
+		//Spawn player at random x,z
+		Network.Instantiate (playerPrefab, new Vector3 (Random.Range (-10.0F, 10.0F), 15, Random.Range (-10.0F, 10.0F)), Quaternion.identity, 0); 
+        //Network.Instantiate(playerPrefab, Vector3.up * 15, Quaternion.identity, 0);
     }
 }

@@ -46,7 +46,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 	
-
+		//
 		//private ModifiedFirstPerson syncCharacter;
 		private Vector3 syncMoveDir;
 		//private CharacterController syncCharacterController;
