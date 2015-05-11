@@ -92,8 +92,10 @@ public class MainMenuManager : MonoBehaviour {
 			if (!Network.isClient && !Network.isServer) {
 				if (hostList != null) {
 					for (int i = 0; i < hostList.Length; i++) {
-						if (GUI.Button (new Rect (600, 110 + (110 * i), 250, 100), hostList [i].gameName))
+						if (GUI.Button (new Rect (600, 110 + (110 * i), 250, 100), hostList [i].gameName)){
+							DisableAllCanvasPanels ();
 							JoinServer (hostList [i]);
+						}
 					}
 				}
 				//
