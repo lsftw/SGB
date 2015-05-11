@@ -29,7 +29,7 @@ public class MainMenuManager : MonoBehaviour {
 	public Button Main_QuitButton;
 
 	public Button Hosting_CancelButton;
-	public Button Hosting_StartButton;
+	//public Button Hosting_StartButton;
 
 	public Button Joining_CancelButton;
 	public Button Joining_RefreshHostsButton;
@@ -73,7 +73,7 @@ public class MainMenuManager : MonoBehaviour {
 		Main_QuitButton.onClick.AddListener (Quit);
 
 		Hosting_CancelButton.onClick.AddListener (CloseServer);
-		Hosting_StartButton.onClick.AddListener (StartGame);
+		//Hosting_StartButton.onClick.AddListener (StartGame);
 		//Hosting_StartButton.interactable = false;
 		//
 		Joining_CancelButton.onClick.AddListener (CancelJoin);
@@ -130,7 +130,7 @@ public class MainMenuManager : MonoBehaviour {
 		Network.InitializeServer(5, 25000, !Network.HavePublicAddress());
 		MasterServer.RegisterHost(GAME_NAME, ROOM_NAME);
 		DisplayCanvas (Hosting_Canvas_Panel);
-		Hosting_StartButton.interactable = false;
+		//Hosting_StartButton.interactable = false;
 		//
 	}
 	private void CloseServer(){
@@ -146,7 +146,7 @@ public class MainMenuManager : MonoBehaviour {
 	{
 		if (WAIT_FOR_TWO_PLAYERS) {
 			waitingForAnotherPlayer = true;
-			Hosting_StartButton.interactable = false; //can't click start until another player joins
+			//Hosting_StartButton.interactable = false; //can't click start until another player joins
 			//GUI.Text(new Rect(200, 200, 250, 100), "Start Server");
 			//
 		} /*else {
@@ -200,12 +200,16 @@ public class MainMenuManager : MonoBehaviour {
 	void UpdateGuiText()
 	{
 		if (WAIT_FOR_TWO_PLAYERS && waitingForAnotherPlayer) {
-			waitingOnPlayersText.text = "Waiting for another player to connect...\n" + 
-				"Your Room Name: " + ROOM_NAME;
-		} else {
+			//waitingOnPlayersText.text = "Waiting for another player to connect...\n" + 
+			//	"Your Room Name: " + ROOM_NAME;
+			waitingOnPlayersText.text = "Game will start when another player connects.";
+		} /*else {
+			//Else is unnecessary - game starts immediately...
 			waitingOnPlayersText.text = "Player connected, ready to start.";
-		}
-
+		}*/
+		//
+		//
+		//
 	}
 	private void SwitchToJoin(){
 		DisplayCanvas (Joining_Canvas_Panel);
