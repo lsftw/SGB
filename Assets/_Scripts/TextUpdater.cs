@@ -9,8 +9,9 @@ public class TextUpdater : MonoBehaviour {
 	}
 	private void UpdateWeaponText() {
 		if (GetLocalPlayer() != null) {
-			string selectedWeapon = GetLocalPlayer().GetComponent<Weapons>().getSelectedWeapon();
-			weaponText.text = "TOOL: " + selectedWeapon;
+			Weapons playerWeapons = GetLocalPlayer().GetComponent<Weapons>();
+			string weaponDescription = playerWeapons.GetWeaponDescription();
+			weaponText.text = "TOOL: " + weaponDescription;
 		}
 	}
 	private GameObject GetLocalPlayer() {
