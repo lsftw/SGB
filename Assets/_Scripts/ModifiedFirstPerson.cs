@@ -107,7 +107,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 				m_PreviouslyGrounded = m_CharacterController.isGrounded;
 
-				HandleMouseClick();
+				// HandleMouseClick();
 			}
         }
 
@@ -115,7 +115,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			GetComponentInChildren<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
 		}
 
-		private void HandleMouseClick() {
+/* 		private void HandleMouseClick() {
 			//CODE FOR DESTROYING BLOCKS 
 			// - NOTE: code involving mouse clicks is updated per frame, so this belongs in Update()
 			// - NOTE: may have to propogate physics over to FixedUpdate if we want to add any...
@@ -147,7 +147,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			Network.Destroy(blockId);
 			// if (GetComponent<NetworkView>().isMine)
 				// GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, blockId);
-		}
+		} */
 
 
         private void PlayLandingSound()
