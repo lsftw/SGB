@@ -27,7 +27,7 @@ public class Code425 : MonoBehaviour {
 	void Kaboom() {
 		foreach (GameObject block in GetAllInRange(gameObject, explosionRadius)) {
 			if (block.tag == "Block") {
-				Destroy(block);
+				Network.Destroy(block);
 			}
 		}
 		Destroy(gameObject);
