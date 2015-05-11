@@ -34,7 +34,11 @@ public class MainMenuManager : MonoBehaviour {
 	public Button Joining_CancelButton;
 	public Button Joining_RefreshHostsButton;
 
+	public GameObject MenuPlane;
+
 	void DisableAllCanvasPanels(){
+		//
+		//
 		Main_Canvas_Panel.SetActive (false);
 		Transform[] tarr = Main_Canvas_Panel.transform.GetComponentsInChildren<Transform> ();
 		foreach (Transform t in tarr) {
@@ -88,6 +92,7 @@ public class MainMenuManager : MonoBehaviour {
 
 	void OnGUI()
 	{
+		///
 		if (Joining_Canvas_Panel.activeSelf) {
 			if (!Network.isClient && !Network.isServer) {
 				if (hostList != null) {
@@ -121,6 +126,8 @@ public class MainMenuManager : MonoBehaviour {
 			}
 			//
 		}
+		//
+		//
 		*/
 	} 
 	//
@@ -163,8 +170,10 @@ public class MainMenuManager : MonoBehaviour {
 			// Enable start button
 			//Hosting_StartButton.interactable = true;
 			DisableAllCanvasPanels();
+			MenuPlane.SetActive (false);
 			StartGame();
 		}
+
 	}
 	void StartGame() {
 		SpawnPlayer();
@@ -176,6 +185,7 @@ public class MainMenuManager : MonoBehaviour {
 	{
 		//Debug.Log ("Joining server!");
 		DisableAllCanvasPanels ();
+		MenuPlane.SetActive (false);
 		Network.Connect(hostData);
 	}
 	
@@ -188,8 +198,6 @@ public class MainMenuManager : MonoBehaviour {
 	
 	void Update()
 	{
-		//
-		//
 		//if (Hosting_Canvas_Panel.activeSelf) {
 		if (isRefreshingHostList && MasterServer.PollHostList ().Length > 0) {
 			isRefreshingHostList = false;
@@ -211,10 +219,10 @@ public class MainMenuManager : MonoBehaviour {
 		}*/
 		//
 		//
-		//
 	}
 	private void SwitchToJoin(){
 		DisplayCanvas (Joining_Canvas_Panel);
+
 		RefreshHostList ();
 	}
 	private void RefreshHostList()
