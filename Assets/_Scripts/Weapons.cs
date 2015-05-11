@@ -6,6 +6,7 @@ using System.Linq;
 public enum Weapon {
 	HAND, // melee, single block destruction
 	DRILL, // melee, multiple block destruction
+	PELLET, // high ranged, high speed, single block destruction
 	CODE425, // high ranged, I am become Death, destroyer of Blocks
 	ICARUS // into the air
 };
@@ -13,6 +14,7 @@ public enum Weapon {
 public class Weapons : MonoBehaviour {
 	private Weapon selectedWeapon = Weapon.HAND;
 	private Camera raycastCamera;
+	public GameObject prefabPellet;
 	public GameObject prefabCode425;
 
 	// Used for GUI text display of selected weapon
@@ -58,8 +60,16 @@ public class Weapons : MonoBehaviour {
 			case Weapon.DRILL:
 			ExplodeMultipleFromCursor(5, .5f);
 			break;
-			case Weapon.CODE425:
+			case Weapon.PELLET:
 			GameObject blockTarget = GetOneFromCursor(1000);
+			if (blockTarget != null) {
+				Vector3 origin = raycastCamera.gameObject.transform.position;
+				Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
+				FirePellet(origin, target);
+			}
+			break;
+			case Weapon.CODE425:
+			blockTarget = GetOneFromCursor(1000);
 			if (blockTarget != null) {
 				Vector3 origin = raycastCamera.gameObject.transform.position;
 				Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
@@ -119,6 +129,10 @@ public class Weapons : MonoBehaviour {
 	}
 	[RPC] void DestroyBlock(NetworkViewID blockId) {
 		Network.Destroy(blockId);
+	}
+	[RPC] void FirePellet(Vector3 origin, Vector3 target) {
+		GameObject projectile = (GameObject)Network.Instantiate(prefabPellet, origin, Quaternion.identity, 0);
+		projectile.GetComponent<Pellet>().setTarget(target);
 	}
 	[RPC] void FireCode425(Vector3 origin, Vector3 target) {
 		GameObject projectile = (GameObject)Network.Instantiate(prefabCode425, origin, Quaternion.identity, 0);

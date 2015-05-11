@@ -111,6 +111,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			}
         }
 
+		private void OnTriggerEnter(Collider other) {
+			if (GetComponent<NetworkView> ().isMine) {
+				Debug.Log("You lost!");
+			} else {
+				Debug.Log("You won!");
+			}
+			gameObject.transform.position = new Vector3(0, 100, 0);
+		}
+
 		private void ChangeColor(Vector3 color) {
 			GetComponentInChildren<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
 		}
