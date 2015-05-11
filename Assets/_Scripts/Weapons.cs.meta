@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2fe45af08b45d614b9a111bbc70a9583
+timeCreated: 1431363715
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - prefabPellet: {fileID: 155124, guid: 0d60ba37758702b469830c040b0b1f49, type: 2}
+  - prefabCode425: {fileID: 122876, guid: 7ee50a21e42a472499b554f045796e6b, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

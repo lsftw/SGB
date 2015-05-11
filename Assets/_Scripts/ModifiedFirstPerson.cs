@@ -46,10 +46,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 	
+<<<<<<< HEAD
 		//
+=======
+		// SGB-specific fields
+>>>>>>> f1674c9bf32abadd2463d666918319ab04f8e86a
 		//private ModifiedFirstPerson syncCharacter;
 		private Vector3 syncMoveDir;
 		//private CharacterController syncCharacterController;
+		private Weapons weapons;
 
         // Use this for initialization
         private void Start()
@@ -68,10 +73,17 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				m_Jumping = false;
 				m_AudioSource = GetComponent<AudioSource> ();
 				m_MouseLook.Init (transform, m_Camera.transform);
+				// Used for text display
+				gameObject.tag = "Player";
+				// Configure weapons
+				// weapons = gameObject.AddComponent<Weapons>();
+				weapons = gameObject.GetComponent<Weapons>();
+				weapons.setCamera(m_Camera);
 			} else {
 				// remove extra audio listener & camera
 				Destroy(GetComponentInChildren<AudioListener>());
 				Destroy(GetComponentInChildren<Camera>());
+				Destroy(GetComponentInChildren<Weapons>());
 			}
         }
 
@@ -99,15 +111,24 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 				m_PreviouslyGrounded = m_CharacterController.isGrounded;
 
-				HandleMouseClick();
+				// HandleMouseClick();
 			}
         }
+
+		private void OnTriggerEnter(Collider other) {
+			if (GetComponent<NetworkView> ().isMine) {
+				Debug.Log("You lost!");
+			} else {
+				Debug.Log("You won!");
+			}
+			gameObject.transform.position = new Vector3(0, 100, 0);
+		}
 
 		private void ChangeColor(Vector3 color) {
 			GetComponentInChildren<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
 		}
 
-		private void HandleMouseClick() {
+/* 		private void HandleMouseClick() {
 			//CODE FOR DESTROYING BLOCKS 
 			// - NOTE: code involving mouse clicks is updated per frame, so this belongs in Update()
 			// - NOTE: may have to propogate physics over to FixedUpdate if we want to add any...
@@ -139,7 +160,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			Network.Destroy(blockId);
 			// if (GetComponent<NetworkView>().isMine)
 				// GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, blockId);
-		}
+		} */
 
 
         private void PlayLandingSound()

@@ -10,7 +10,8 @@ using System.Collections;
 public class NetworkManager : MonoBehaviour
 {
     private const string GAME_NAME = "SGB";
-    private const string ROOM_NAME = "coaxed-into-a-snafu";
+    private string[] ROOM_NAMES = {"coaxed-into-a-snafu", "on-the-ruse-cruise", "busted-your-trust"};
+	private string roomName;
 
 	// if true, waits for a client to connect to server before initializing game
 	// necessary for multiplayer Network.Instantiate of block world to work
@@ -47,10 +48,15 @@ public class NetworkManager : MonoBehaviour
         }
     }
 	//
+	private string getRandomRoomName()
+	{
+		return ROOM_NAMES[Random.Range(0, ROOM_NAMES.Length)];
+	}
     private void StartServer()
     {
+		roomName = getRandomRoomName();
         Network.InitializeServer(5, 25000, !Network.HavePublicAddress());
-        MasterServer.RegisterHost(GAME_NAME, ROOM_NAME);
+        MasterServer.RegisterHost(GAME_NAME, roomName);
 		//
 		//
 
@@ -60,9 +66,13 @@ public class NetworkManager : MonoBehaviour
     {
 		if (WAIT_FOR_TWO_PLAYERS) {
 			waitingForAnotherPlayer = true;
+<<<<<<< HEAD
 			// TODO show gui text about waiting for player
 			//GUI.Text(new Rect(200, 200, 250, 100), "Start Server");
 		} /*else {
+=======
+		} else {
+>>>>>>> f1674c9bf32abadd2463d666918319ab04f8e86a
 			StartGame();
 		}*/
     }
@@ -103,7 +113,7 @@ public class NetworkManager : MonoBehaviour
 	{
 		if (WAIT_FOR_TWO_PLAYERS && waitingForAnotherPlayer) {
 			textDisplay.text = "Waiting for another player to connect...\n" + 
-				"Your Room Name: " + ROOM_NAME;
+				"Your Room Name: " + roomName;
 		} else {
 			textDisplay.text = "";
 		}

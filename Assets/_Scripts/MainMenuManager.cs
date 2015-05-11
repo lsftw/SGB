@@ -203,10 +203,10 @@ public class MainMenuManager : MonoBehaviour {
 				//Joining_Canvas_Panel
 				GameObject jb = GUI.Button(new Rect(500, 100, 300, 100), hostList[i].gameName);
 				jb.transform.SetParent(Joining_Canvas_Panel.transform, false);
-				Button joinButton = (Button) jb;
+				/*Button joinButton = (Button) jb;
 				joinButton.onClick.AddListener(delegate {JoinServer(hostList[i]);});
 				joinButton.gameObject.SetActive(true);
-				joinButton.interactable = true;
+				joinButton.interactable = true;*/
 			
 				/*if (GUI.Button(new Rect(100, 100 + (110 * i), 300, 100), hostList[i].gameName))
 					JoinServer(hostList[i]);
