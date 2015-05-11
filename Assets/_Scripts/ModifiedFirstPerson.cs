@@ -46,11 +46,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 	
-<<<<<<< HEAD
-		//
-=======
 		// SGB-specific fields
->>>>>>> f1674c9bf32abadd2463d666918319ab04f8e86a
 		//private ModifiedFirstPerson syncCharacter;
 		private Vector3 syncMoveDir;
 		//private CharacterController syncCharacterController;

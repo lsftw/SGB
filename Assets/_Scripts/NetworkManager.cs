@@ -66,15 +66,12 @@ public class NetworkManager : MonoBehaviour
     {
 		if (WAIT_FOR_TWO_PLAYERS) {
 			waitingForAnotherPlayer = true;
-<<<<<<< HEAD
+
 			// TODO show gui text about waiting for player
 			//GUI.Text(new Rect(200, 200, 250, 100), "Start Server");
-		} /*else {
-=======
 		} else {
->>>>>>> f1674c9bf32abadd2463d666918319ab04f8e86a
 			StartGame();
-		}*/
+		}
     }
     void OnPlayerConnected(NetworkPlayer player) {
 		//Debug.Log("Player " + playerCount++ + " connected from " + player.ipAddress + ":" + player.port);
