@@ -19,13 +19,19 @@ public class Weapons : MonoBehaviour {
 	private Camera raycastCamera;
 	// Ammo: Negative numbers mean unlimited ammo
 	private Dictionary<Weapon, int> ammo = new Dictionary<Weapon, int>();
+	private Dictionary<Weapon, double> cooldown = new Dictionary<Weapon, double>();
 
 	public Weapons() {
 		ammo.Add(Weapon.HAND, -1);
+		cooldown.Add(Weapon.HAND, .25);
 		ammo.Add(Weapon.DRILL, -1);
+		// cooldown.Add(Weapon., );
 		ammo.Add(Weapon.PELLET, 300);
+		// cooldown.Add(Weapon., );
 		ammo.Add(Weapon.CODE425, 1);
+		// cooldown.Add(Weapon., );
 		ammo.Add(Weapon.ICARUS, -1);
+		// cooldown.Add(Weapon., );
 	}
 	public bool TryFiring() {
 		if (ammo[selectedWeapon] == 0) {
@@ -36,16 +42,12 @@ public class Weapons : MonoBehaviour {
 			}
 			return true;
 		}
-		// int curAmmo;
-		// if (ammo.TryGetValue(selectedWeapon, out curAmmo)) {
-			// ammo[selectedWeapon] = curAmmo - 1;
-		// }
 	}
 	// Used for GUI text display of selected weapon
 	public string GetWeaponDescription() {
 		string weaponName = selectedWeapon.ToString();
 		string ammoText = ammo[selectedWeapon].ToString();
-		if (ammo[selectedWeapon] < 0) {
+		if (ammo[selectedWeapon] < 0) { // negative = unlimited ammo
 			return string.Format("{0}", weaponName);
 		}
 		return string.Format("{0} x{1}", weaponName, ammoText);
@@ -55,9 +57,6 @@ public class Weapons : MonoBehaviour {
 		this.raycastCamera = raycastCamera;
 	}
 
-	void Start() {
-	}
-	
 	void Update() {
 		HandleWeaponSwap();
 		HandleMouseClick();
