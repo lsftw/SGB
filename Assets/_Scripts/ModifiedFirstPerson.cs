@@ -71,6 +71,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				m_MouseLook.Init (transform, m_Camera.transform);
 				// Used for text display
 				gameObject.tag = "Player";
+				gameObject.layer = Weapons.LAYER_LOCAL_PLAYER; // Avoid self-targetting with projectile weapons
 				// Configure weapons
 				// weapons = gameObject.AddComponent<Weapons>();
 				weapons = gameObject.GetComponent<Weapons>();

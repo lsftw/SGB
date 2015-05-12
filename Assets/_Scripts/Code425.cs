@@ -9,7 +9,7 @@ public class Code425 : MonoBehaviour {
 	[RPC] public void setTarget(Vector3 target) {
 		this.target = target;
 	}
-
+	
 	// Update is called once per frame
 	void Update() {
 		if (target != null) {
@@ -23,7 +23,7 @@ public class Code425 : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	void Kaboom() {
 		foreach (GameObject block in GetAllInRange(gameObject, explosionRadius)) {
 			if (block.tag == "Block") {
@@ -35,7 +35,7 @@ public class Code425 : MonoBehaviour {
 	
 	System.Collections.Generic.IEnumerable<GameObject> GetAllInRange(GameObject centerObject, float radius) {
 		Vector3 center = centerObject.GetComponent<Renderer>().bounds.center;
-        Collider[] colliders = Physics.OverlapSphere(center, radius);
+		Collider[] colliders = Physics.OverlapSphere(center, radius);
 		return colliders.Select(collider => collider.gameObject);
-    }
+	}
 }

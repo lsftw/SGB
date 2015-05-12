@@ -13,6 +13,8 @@ public enum Weapon {
 };
 // Handles weapon selection for a single player
 public class Weapons : MonoBehaviour {
+	public const int LAYER_LOCAL_PLAYER = 8;
+
 	public GameObject prefabPellet;
 	public GameObject prefabCode425;
 	private Weapon selectedWeapon = Weapon.HAND;
@@ -111,19 +113,16 @@ public class Weapons : MonoBehaviour {
 				ExplodeMultipleFromCursor(5, .5f);
 				break;
 				case Weapon.PELLET:
-				GameObject blockTarget = GetOneFromCursor(1000);
-				if (blockTarget != null) {
-					Vector3 origin = raycastCamera.gameObject.transform.position;
-					Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
-					FirePellet(origin, target);
+				Vector3 origin = raycastCamera.gameObject.transform.position;
+				Vector3 point;
+				if (GetRayFromCursor(out point)) {
+					FirePellet(origin, point);
 				}
 				break;
 				case Weapon.CODE425:
-				blockTarget = GetOneFromCursor(1000);
-				if (blockTarget != null) {
-					Vector3 origin = raycastCamera.gameObject.transform.position;
-					Vector3 target = blockTarget.GetComponent<Renderer>().bounds.center;
-					FireCode425(origin, target);
+				origin = raycastCamera.gameObject.transform.position;
+				if (GetRayFromCursor(out point)) {
+					FireCode425(origin, point);
 				}
 				break;
 				case Weapon.ICARUS:
@@ -136,6 +135,17 @@ public class Weapons : MonoBehaviour {
 		}
 	}
 
+	private bool GetRayFromCursor(out Vector3 point) {
+		RaycastHit objectHit;
+		Ray ray = raycastCamera.ScreenPointToRay(Input.mousePosition);
+		if (Physics.Raycast(ray, out objectHit, Mathf.Infinity, ~LAYER_LOCAL_PLAYER)) {
+			point = objectHit.point;
+			return true;
+		}
+		Debug.Log ("none");
+		point = new Vector3(0, 0, 0);
+		return false;
+	}
 	private GameObject GetOneFromCursor(int maxDistance) {
 		RaycastHit objectHit;
 		Ray ray = raycastCamera.ScreenPointToRay(Input.mousePosition);
@@ -187,13 +197,13 @@ public class Weapons : MonoBehaviour {
 	[RPC] void DestroyBlock(NetworkViewID blockId) {
 		Network.Destroy(blockId);
 	}
-	[RPC] void FirePellet(Vector3 origin, Vector3 target) {
+	[RPC] void FirePellet(Vector3 origin, Vector3 direction) {
 		GameObject projectile = (GameObject)Network.Instantiate(prefabPellet, origin, Quaternion.identity, 0);
-		projectile.GetComponent<Pellet>().setTarget(target);
+		projectile.GetComponent<Pellet>().setTarget(direction);
 	}
-	[RPC] void FireCode425(Vector3 origin, Vector3 target) {
+	[RPC] void FireCode425(Vector3 origin, Vector3 direction) {
 		GameObject projectile = (GameObject)Network.Instantiate(prefabCode425, origin, Quaternion.identity, 0);
-		projectile.GetComponent<Code425>().setTarget(target);
+		projectile.GetComponent<Code425>().setTarget(direction);
 	}
 
 }
