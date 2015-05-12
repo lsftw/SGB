@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Linq;
 
+// TODO projectile superclass
+// TODO add lifetime
 public class Pellet : MonoBehaviour {
 	public float maxSpeed = 30;
 	public float explosionRadius = .1f;
