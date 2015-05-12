@@ -1,3 +1,6 @@
+// Avoid warnings about dead code
+#define WAIT_FOR_TWO_PLAYERS
+
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -16,7 +19,6 @@ public class NetworkManager : MonoBehaviour
 	// if true, waits for a client to connect to server before initializing game
 	// necessary for multiplayer Network.Instantiate of block world to work
 	// (since if a client connects after server world instantiation, they don't receive any instantiate calls)
-	public const bool WAIT_FOR_TWO_PLAYERS = true;
 	private bool waitingForAnotherPlayer;
 
     private bool isRefreshingHostList = false;
@@ -64,21 +66,20 @@ public class NetworkManager : MonoBehaviour
 
     void OnServerInitialized()
     {
-		if (WAIT_FOR_TWO_PLAYERS) {
+#if WAIT_FOR_TWO_PLAYERS
 			waitingForAnotherPlayer = true;
-
-			// TODO show gui text about waiting for player
-			//GUI.Text(new Rect(200, 200, 250, 100), "Start Server");
-		} else {
+#else
 			StartGame();
-		}
+#endif
     }
     void OnPlayerConnected(NetworkPlayer player) {
 		//Debug.Log("Player " + playerCount++ + " connected from " + player.ipAddress + ":" + player.port);
-		if (WAIT_FOR_TWO_PLAYERS && waitingForAnotherPlayer) {
+#if WAIT_FOR_TWO_PLAYERS
+		if (waitingForAnotherPlayer) {
 			waitingForAnotherPlayer = false;
 			StartGame();
 		}
+#endif
     }
 	void StartGame() {
 		SpawnPlayer();
@@ -108,12 +109,13 @@ public class NetworkManager : MonoBehaviour
     }
 	void UpdateGuiText()
 	{
-		if (WAIT_FOR_TWO_PLAYERS && waitingForAnotherPlayer) {
+		textDisplay.text = "";
+#if WAIT_FOR_TWO_PLAYERS
+		if (waitingForAnotherPlayer) {
 			textDisplay.text = "Waiting for another player to connect...\n" + 
 				"Your Room Name: " + roomName;
-		} else {
-			textDisplay.text = "";
 		}
+#endif
 	}
 
     private void RefreshHostList()
