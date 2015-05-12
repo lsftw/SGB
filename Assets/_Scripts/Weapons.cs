@@ -163,6 +163,7 @@ public class Weapons : MonoBehaviour {
 		if (Physics.Raycast(ray, out objectHit, maxDistance)) {
 			//if they left click, objectHit will have the targeted object's data
 			GameObject block = objectHit.collider.gameObject;
+			Debug.Log("Hit object!");
 			DestroyEntity(block);
 		}
 	}
@@ -185,16 +186,17 @@ public class Weapons : MonoBehaviour {
 
 	void DestroyEntity(GameObject entity) {
 		// only allow destroying blocks
-		Debug.Log (entity.gameObject.GetComponent<ModifiedFirstPerson> ());
+		Debug.Log ("destroy entity!");
+		Debug.Log (entity.gameObject.GetComponent<ModifiedFirstPerson> () != null);
 		if (entity.tag == "Block") { // YOU CAN USE == FOR STRING EQUALITY C# MVP
 			DestroyBlock (entity.GetComponent<NetworkView> ().viewID);
 		} else if (entity.gameObject.GetComponent<ModifiedFirstPerson>() != null) {
 			Debug.Log ("hit player!");
 			KnockbackPlayer(entity.GetComponent<NetworkView>().viewID, 5);
+			//
 		}
 	}
 	[RPC] void KnockbackPlayer(NetworkViewID playerID, int force){
-
 		Rigidbody r = NetworkView.Find (playerID).gameObject.GetComponent<Rigidbody> ();
 		r.AddForce (force * new Vector3(1, 1, 1));
 	}
