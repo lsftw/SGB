@@ -175,8 +175,14 @@ public class Weapons : MonoBehaviour {
 	void DestroyEntity(GameObject entity) {
 		// only allow destroying blocks
 		if (entity.tag == "Block") { // YOU CAN USE == FOR STRING EQUALITY C# MVP
-			DestroyBlock(entity.GetComponent<NetworkView>().viewID);
+			DestroyBlock (entity.GetComponent<NetworkView> ().viewID);
+		} else if (entity.tag == "Player") {
+			KnockbackPlayer(entity.GetComponent<NetworkView>().viewID, 5);
 		}
+	}
+	[RPC] void KnockbackPlayer(NetworkViewID playerID, int force){
+		Rigidbody r = NetworkView.Find (playerID).gameObject.GetComponent<Rigidbody> ();
+		r.AddForce (force * Vector3.back);
 	}
 	[RPC] void DestroyBlock(NetworkViewID blockId) {
 		Network.Destroy(blockId);
@@ -189,4 +195,5 @@ public class Weapons : MonoBehaviour {
 		GameObject projectile = (GameObject)Network.Instantiate(prefabCode425, origin, Quaternion.identity, 0);
 		projectile.GetComponent<Code425>().setTarget(target);
 	}
+
 }

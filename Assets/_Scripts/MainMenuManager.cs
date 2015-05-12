@@ -37,8 +37,6 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject MenuPlane;
 
 	void DisableAllCanvasPanels(){
-		//
-		//
 		Main_Canvas_Panel.SetActive (false);
 		Transform[] tarr = Main_Canvas_Panel.transform.GetComponentsInChildren<Transform> ();
 		foreach (Transform t in tarr) {
@@ -54,6 +52,7 @@ public class MainMenuManager : MonoBehaviour {
 		foreach (Transform t in tarr) {
 			t.gameObject.SetActive(false);
 		}
+		//
 	}
 
 	void DisplayCanvas(GameObject panel){
