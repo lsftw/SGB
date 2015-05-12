@@ -5,7 +5,7 @@ using System.Linq;
 public class Code425 : MonoBehaviour {
 	public float maxSpeed = 10;
 	public float explosionRadius = 7f;
-	private Vector3 target;
+	private Vector3? target;
 	[RPC] public void setTarget(Vector3 target) {
 		this.target = target;
 	}
@@ -15,7 +15,7 @@ public class Code425 : MonoBehaviour {
 		if (target != null) {
 			Vector3 oldPosition = transform.position;
 			float step = maxSpeed * Time.deltaTime;
-			transform.position = Vector3.MoveTowards(transform.position, target, step);
+			transform.position = Vector3.MoveTowards(transform.position, target.Value, step);
 			Vector3 newPosition = transform.position;
 			float distanceTravelled = Vector3.Distance(oldPosition, newPosition);
 			if (distanceTravelled < .0001) {

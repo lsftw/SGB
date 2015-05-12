@@ -5,7 +5,7 @@ using System.Collections;
 public class Chat : MonoBehaviour {
 	public Text chatDisplay;
 	private string curText = "";
-	private bool writingText = false;
+//	private bool writingText = false;
 
 	// Use this for initialization
 	void Start () {
