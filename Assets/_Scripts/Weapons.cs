@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public enum Weapon {
 	HAND, // melee, single block destruction
@@ -184,15 +185,18 @@ public class Weapons : MonoBehaviour {
 
 	void DestroyEntity(GameObject entity) {
 		// only allow destroying blocks
+		Debug.Log (entity.gameObject.GetComponent<ModifiedFirstPerson> ());
 		if (entity.tag == "Block") { // YOU CAN USE == FOR STRING EQUALITY C# MVP
 			DestroyBlock (entity.GetComponent<NetworkView> ().viewID);
-		} else if (entity.tag == "Player") {
+		} else if (entity.gameObject.GetComponent<ModifiedFirstPerson>() != null) {
+			Debug.Log ("hit player!");
 			KnockbackPlayer(entity.GetComponent<NetworkView>().viewID, 5);
 		}
 	}
 	[RPC] void KnockbackPlayer(NetworkViewID playerID, int force){
+
 		Rigidbody r = NetworkView.Find (playerID).gameObject.GetComponent<Rigidbody> ();
-		r.AddForce (force * Vector3.back);
+		r.AddForce (force * new Vector3(1, 1, 1));
 	}
 	[RPC] void DestroyBlock(NetworkViewID blockId) {
 		Network.Destroy(blockId);
