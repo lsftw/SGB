@@ -226,14 +226,17 @@ public class MainMenuManager : MonoBehaviour {
 	}
 	private void RefreshHostList()
 	{
-
+		if (hostList == null) {
+			hostList = MasterServer.PollHostList ();
+		}
 		if (!isRefreshingHostList)
 		{
 			isRefreshingHostList = true;
 			MasterServer.RequestHostList(GAME_NAME);
 			hostList = MasterServer.PollHostList ();
 
-		}
+		} 
+
 		/*if (hostList != null)
 		{
 

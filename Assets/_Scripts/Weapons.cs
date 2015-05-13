@@ -186,19 +186,26 @@ public class Weapons : MonoBehaviour {
 
 	void DestroyEntity(GameObject entity) {
 		// only allow destroying blocks
+
+		//
+		//
 		Debug.Log ("destroy entity!");
 		Debug.Log (entity.gameObject.GetComponent<ModifiedFirstPerson> () != null);
 		if (entity.tag == "Block") { // YOU CAN USE == FOR STRING EQUALITY C# MVP
 			DestroyBlock (entity.GetComponent<NetworkView> ().viewID);
 		} else if (entity.gameObject.GetComponent<ModifiedFirstPerson>() != null) {
 			Debug.Log ("hit player!");
-			KnockbackPlayer(entity.GetComponent<NetworkView>().viewID, 5);
-			//
+			KnockbackPlayer(entity.GetComponent<NetworkView>().viewID, 1000);
 		}
+		//
+		//
 	}
 	[RPC] void KnockbackPlayer(NetworkViewID playerID, int force){
 		Rigidbody r = NetworkView.Find (playerID).gameObject.GetComponent<Rigidbody> ();
-		r.AddForce (force * new Vector3(1, 1, 1));
+		r.isKinematic = false;
+		//r.MovePosition (r.transform.position + force * new Vector3 (1, 1, 1));
+		r.AddForce (force * new Vector3(1, 1, 1)); //can't add force with player is kinematic
+		//r.isKinematic = true;
 	}
 	[RPC] void DestroyBlock(NetworkViewID blockId) {
 		Network.Destroy(blockId);
