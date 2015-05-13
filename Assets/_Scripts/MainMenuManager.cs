@@ -32,7 +32,6 @@ public class MainMenuManager : MonoBehaviour {
 	public Button Hosting_CancelButton;
 	//public Button Hosting_StartButton;
 
-
 	public Button Joining_CancelButton;
 	public Button Joining_RefreshHostsButton;
 
@@ -41,14 +40,14 @@ public class MainMenuManager : MonoBehaviour {
 
 	public GameObject SharedNetworkData;
 
-	void DisableAllCanvasPanels(){
+	void DisableAllCanvasPanels() {
 		DisablePanel (Game_Panel);
 		DisablePanel (Main_Canvas_Panel);
 		DisablePanel (Hosting_Canvas_Panel);
 		DisablePanel (Joining_Canvas_Panel);
 		//
 	}
-	void DisablePanel(GameObject panel){
+	void DisablePanel(GameObject panel) {
 		panel.SetActive (false);
 		Transform[] tarr = panel.transform.GetComponentsInChildren<Transform> ();
 		foreach (Transform t in tarr) {
@@ -57,7 +56,7 @@ public class MainMenuManager : MonoBehaviour {
 		//
 	}
 
-	void DisplayCanvas(GameObject panel){
+	void DisplayCanvas(GameObject panel) {
 		DisableAllCanvasPanels ();
 
 		//enable all children of the active canvas
@@ -107,24 +106,22 @@ public class MainMenuManager : MonoBehaviour {
 			}
 		}
 	}
-	private void StartServer()
-	{
+	private void StartServer() {
 		Network.InitializeServer(5, 25000, !Network.HavePublicAddress());
 		MasterServer.RegisterHost(GAME_NAME, ROOM_NAME);
 		DisplayCanvas (Hosting_Canvas_Panel);
 		//Hosting_StartButton.interactable = false;
 	}
-	private void CloseServer(){
+	private void CloseServer() {
 		Network.Disconnect ();
 		MasterServer.UnregisterHost ();
 		DisplayCanvas(Main_Canvas_Panel);
 	}
-	private void CancelJoin(){
+	private void CancelJoin() {
 		DisplayCanvas (Main_Canvas_Panel);
 		//TODO remove server gui buttons!!!!
 	}
-	void OnServerInitialized()
-	{
+	void OnServerInitialized() {
 		if (WAIT_FOR_TWO_PLAYERS) {
 			waitingForAnotherPlayer = true;
 			//Hosting_StartButton.interactable = false; //can't click start until another player joins
@@ -159,8 +156,7 @@ public class MainMenuManager : MonoBehaviour {
 		GenerateWorld();
 		//textDisplay = GetComponent<Canvas> ().GetComponent<"CenterText">;
 	}
-	private void JoinServer(HostData hostData)
-	{
+	private void JoinServer(HostData hostData) {
 		//Debug.Log ("Joining server!");
 		//DisableAllCanvasPanels ();
 		//MenuPlane.SetActive (false);
@@ -200,13 +196,11 @@ public class MainMenuManager : MonoBehaviour {
 
 		RefreshHostList ();
 	}
-	private void RefreshHostList()
-	{
+	private void RefreshHostList() {
 		if (hostList == null) {
 			hostList = MasterServer.PollHostList ();
 		}
-		if (!isRefreshingHostList)
-		{
+		if (!isRefreshingHostList) {
 			isRefreshingHostList = true;
 			MasterServer.RequestHostList(GAME_NAME);
 			hostList = MasterServer.PollHostList ();
