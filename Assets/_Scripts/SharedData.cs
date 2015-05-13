@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Shares game data such as score
 public class SharedData : MonoBehaviour {
 
 	int myScore = 0;
@@ -9,12 +10,6 @@ public class SharedData : MonoBehaviour {
 	//maybe try
 // http://answers.unity3d.com/questions/625411/view-pvp-scores-on-screen-in-real-time.html
 
-	public void win(){
-		myScore += 1;
-	}
-	public void lose(){
-		theirScore += 1;
-	}
 	public int getMyScore(){
 		return myScore;
 	}
@@ -22,6 +17,12 @@ public class SharedData : MonoBehaviour {
 		return theirScore;
 	}
 
+	public void win(){
+		myScore += 1;
+	}
+	public void lose(){
+		theirScore += 1;
+	}
 	[RPC] public void registerLose(){
 		Debug.Log ("lose RPC, myscore=" + myScore);
 		lose ();
@@ -31,19 +32,13 @@ public class SharedData : MonoBehaviour {
 		win ();
 	}
 
-	/*
-	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
-	{
-		if (stream.isWriting)
-		{
-			Debug.Log("writing shared myScore = " + myScore);
+	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
+		if (stream.isWriting) {
+			stream.Serialize(ref theirScore);
+			Debug.Log("writing shared theirScore = "+theirScore);
+		} else {
+			Debug.Log("receiving shared myScore = " + myScore);
 			stream.Serialize(ref myScore);
 		}
-		else
-		{
-
-			stream.Serialize(ref theirScore);
-			Debug.Log("receiving shared theirScore = "+theirScore);
-		}
-	}*/
+	}
 }
