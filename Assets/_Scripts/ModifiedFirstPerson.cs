@@ -52,11 +52,17 @@ namespace UnityStandardAssets.Characters.FirstPerson
 		//private CharacterController syncCharacterController;
 		private Weapons weapons;
 
+		//int myScore = 0;
+		//int theirScore = 0;
+
+		//private GameObject textUpdater;
+
         // Use this for initialization
         private void Start()
         {
-			m_CharacterController = GetComponent<CharacterController> ();
 
+			m_CharacterController = GetComponent<CharacterController> ();
+			//textUpdater = GameObject.FindGameObjectWithTag ("TextUpdater");
 			//so the cameras don't get swapped when joining game...
 			if (GetComponent<NetworkView> ().isMine) {
 				m_Camera = GetComponentInChildren<Camera>();
@@ -115,11 +121,29 @@ namespace UnityStandardAssets.Characters.FirstPerson
 		private void OnTriggerEnter(Collider other) {
 			if (GetComponent<NetworkView> ().isMine) {
 				Debug.Log("You lost!");
+				GameObject.FindGameObjectWithTag("SharedData").GetComponent<SharedData>().registerLose();
+				//theirScore ++;
+				//lose ();
+				//textUpdater.GetComponent<TextUpdater>().registerLose();
+
 			} else {
 				Debug.Log("You won!");
+				GameObject.FindGameObjectWithTag("SharedData").GetComponent<SharedData>().registerWin();
+				//myScore++;
+				//win();
+				//textUpdater.GetComponent<TextUpdater>().registerWin();
 			}
 			gameObject.transform.position = new Vector3(0, 100, 0);
+		}	
+		/*
+		[RPC] void lose(NetworkViewID theirID){
+			textUpdater.GetComponent<TextUpdater>().registerWin(); //other player registers win
 		}
+		[RPC] void win(NetworkViewID theirID){
+			textUpdater.GetComponent<TextUpdater>().registerLose();
+
+		}
+		*/
 
 		private void ChangeColor(Vector3 color) {
 			GetComponentInChildren<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);

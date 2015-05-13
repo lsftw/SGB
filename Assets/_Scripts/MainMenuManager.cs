@@ -23,6 +23,7 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject Main_Canvas_Panel;
 	public GameObject Hosting_Canvas_Panel;
 	public GameObject Joining_Canvas_Panel;
+	public GameObject Game_Panel;
 
 	public Button Main_HostServerButton;
 	public Button Main_SearchForHostsButton;
@@ -31,25 +32,25 @@ public class MainMenuManager : MonoBehaviour {
 	public Button Hosting_CancelButton;
 	//public Button Hosting_StartButton;
 
+
 	public Button Joining_CancelButton;
 	public Button Joining_RefreshHostsButton;
 
 	public GameObject MenuPlane;
 	public GameObject MinimapPlane;
 
+	public GameObject SharedNetworkData;
+
 	void DisableAllCanvasPanels(){
-		Main_Canvas_Panel.SetActive (false);
-		Transform[] tarr = Main_Canvas_Panel.transform.GetComponentsInChildren<Transform> ();
-		foreach (Transform t in tarr) {
-			t.gameObject.SetActive(false);
-		}
-		Hosting_Canvas_Panel.SetActive (false);
-		tarr = Hosting_Canvas_Panel.transform.GetComponentsInChildren<Transform> ();
-		foreach (Transform t in tarr) {
-			t.gameObject.SetActive(false);
-		}
-		Joining_Canvas_Panel.SetActive (false);
-		tarr = Joining_Canvas_Panel.transform.GetComponentsInChildren<Transform> ();
+		DisablePanel (Game_Panel);
+		DisablePanel (Main_Canvas_Panel);
+		DisablePanel (Hosting_Canvas_Panel);
+		DisablePanel (Joining_Canvas_Panel);
+		//
+	}
+	void DisablePanel(GameObject panel){
+		panel.SetActive (false);
+		Transform[] tarr = panel.transform.GetComponentsInChildren<Transform> ();
 		foreach (Transform t in tarr) {
 			t.gameObject.SetActive(false);
 		}
@@ -178,9 +179,13 @@ public class MainMenuManager : MonoBehaviour {
 
 	}
 	void StartGame() {
+		if (Network.isServer) {
+			Network.Instantiate(SharedNetworkData, new Vector3(0,0,0), Quaternion.identity, 0);
+		}
 		DisableAllCanvasPanels();
 		MinimapPlane.SetActive (true);
 		MenuPlane.SetActive (false);
+		DisplayCanvas (Game_Panel);
 		SpawnPlayer();
 		GenerateWorld();
 		//textDisplay = GetComponent<Canvas> ().GetComponent<"CenterText">;
