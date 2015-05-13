@@ -6,7 +6,7 @@ public class MainMenuManager : MonoBehaviour {
 	
 	private const string GAME_NAME = "SGB";
 	private const string ROOM_NAME = "coaxed-into-a-snafu";
-	//
+
 	// if true, waits for a client to connect to server before initializing game
 	// necessary for multiplayer Network.Instantiate of block world to work
 	// (since if a client connects after server world instantiation, they don't receive any instantiate calls)
@@ -45,7 +45,6 @@ public class MainMenuManager : MonoBehaviour {
 		DisablePanel (Main_Canvas_Panel);
 		DisablePanel (Hosting_Canvas_Panel);
 		DisablePanel (Joining_Canvas_Panel);
-		//
 	}
 	void DisablePanel(GameObject panel) {
 		panel.SetActive (false);
