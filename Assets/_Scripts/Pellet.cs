@@ -2,40 +2,13 @@
 using System.Collections;
 using System.Linq;
 
-// TODO projectile superclass
-// TODO add lifetime
-public class Pellet : MonoBehaviour {
+public class Pellet : Projectile {
 	public float maxSpeed = 30;
 	public float explosionRadius = .1f;
-	private Vector3 target;
-	[RPC] public void setTarget(Vector3 target) {
-		this.target = target;
+	public override float GetMaxSpd() {
+		return maxSpeed;
 	}
-
-	// Update is called once per frame
-	void Update() {
-		Vector3 oldPosition = transform.position;
-		float step = maxSpeed * Time.deltaTime;
-		transform.position = Vector3.MoveTowards(transform.position, target, step);
-		Vector3 newPosition = transform.position;
-		float distanceTravelled = Vector3.Distance(oldPosition, newPosition);
-		if (distanceTravelled < .0001) {
-			Kaboom();
-		}
+	public override float GetExplodeRadius() {
+		return explosionRadius;
 	}
-
-	void Kaboom() {
-		foreach (GameObject block in GetAllInRange(gameObject, explosionRadius)) {
-			if (block.tag == "Block") {
-				Network.Destroy(block);
-			}
-		}
-		Destroy(gameObject);
-	}
-	
-	System.Collections.Generic.IEnumerable<GameObject> GetAllInRange(GameObject centerObject, float radius) {
-		Vector3 center = centerObject.GetComponent<Renderer>().bounds.center;
-        Collider[] colliders = Physics.OverlapSphere(center, radius);
-		return colliders.Select(collider => collider.gameObject);
-    }
 }

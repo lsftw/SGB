@@ -2,38 +2,13 @@
 using System.Collections;
 using System.Linq;
 
-public class Code425 : MonoBehaviour {
+public class Code425 : Projectile {
 	public float maxSpeed = 10;
 	public float explosionRadius = 7f;
-	private Vector3 target;
-	[RPC] public void setTarget(Vector3 target) {
-		this.target = target;
+	public override float GetMaxSpd() {
+		return maxSpeed;
 	}
-	
-	// Update is called once per frame
-	void Update() {
-		Vector3 oldPosition = transform.position;
-		float step = maxSpeed * Time.deltaTime;
-		transform.position = Vector3.MoveTowards(transform.position, target, step);
-		Vector3 newPosition = transform.position;
-		float distanceTravelled = Vector3.Distance(oldPosition, newPosition);
-		if (distanceTravelled < .0001) {
-			Kaboom();
-		}
-	}
-	
-	void Kaboom() {
-		foreach (GameObject block in GetAllInRange(gameObject, explosionRadius)) {
-			if (block.tag == "Block") {
-				Network.Destroy(block);
-			}
-		}
-		Destroy(gameObject);
-	}
-	
-	System.Collections.Generic.IEnumerable<GameObject> GetAllInRange(GameObject centerObject, float radius) {
-		Vector3 center = centerObject.GetComponent<Renderer>().bounds.center;
-		Collider[] colliders = Physics.OverlapSphere(center, radius);
-		return colliders.Select(collider => collider.gameObject);
+	public override float GetExplodeRadius() {
+		return explosionRadius;
 	}
 }
