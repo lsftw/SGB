@@ -6,6 +6,8 @@ public class SharedData : MonoBehaviour {
 	int myScore = 0;
 	int theirScore = 0;
 
+	//maybe try
+// http://answers.unity3d.com/questions/625411/view-pvp-scores-on-screen-in-real-time.html
 
 	public void win(){
 		myScore += 1;
