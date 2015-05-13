@@ -207,10 +207,11 @@ public class Weapons : MonoBehaviour {
 		//
 	}
 	[RPC] void KnockbackPlayer(NetworkViewID playerID, int force){
-		Rigidbody r = NetworkView.Find (playerID).gameObject.GetComponent<Rigidbody> ();
-		r.isKinematic = false;
+		//TODO not working yet!
+		//Rigidbody r = NetworkView.Find (playerID).gameObject.GetComponent<Rigidbody> ();
+		//r.isKinematic = false;
 		//r.MovePosition (r.transform.position + force * new Vector3 (1, 1, 1));
-		r.AddForce (force * new Vector3(1, 1, 1)); //can't add force with player is kinematic
+		//r.AddForce (force * new Vector3(1, 1, 1)); //can't add force with player is kinematic
 		//r.isKinematic = true;
 	}
 	[RPC] void DestroyBlock(NetworkViewID blockId) {
