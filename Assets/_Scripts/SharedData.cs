@@ -17,20 +17,23 @@ public class SharedData : MonoBehaviour {
 		return theirScore;
 	}
 
-	public void win(){
+	[RPC] public void win(){
 		myScore += 1;
 	}
-	public void lose(){
+	[RPC] public void lose(){
 		theirScore += 1;
 	}
 	[RPC] public void registerLose(){
 		Debug.Log ("lose RPC, myscore=" + myScore);
+		
+		GetComponent<NetworkView>().RPC ("win", RPCMode.Others);
 		lose ();
-	}
+	}/*
 	[RPC] public void registerWin(){
 		Debug.Log ("win RPC, myscore=" + myScore);
+		GetComponent<NetworkView>().RPC ("lose", RPCMode.Others);
 		win ();
-	}
+	}*/
 
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
 		if (stream.isWriting) {
