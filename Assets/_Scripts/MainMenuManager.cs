@@ -35,6 +35,7 @@ public class MainMenuManager : MonoBehaviour {
 	public Button Joining_RefreshHostsButton;
 
 	public GameObject MenuPlane;
+	public GameObject MinimapPlane;
 
 	void DisableAllCanvasPanels(){
 		Main_Canvas_Panel.SetActive (false);
@@ -69,6 +70,8 @@ public class MainMenuManager : MonoBehaviour {
 
 	void Start () {
 		DisplayCanvas(Main_Canvas_Panel);
+
+		MinimapPlane.SetActive (false);
 
 		//Main_SearchForHostsButton.onClick.AddListener(delegate{testDebug();});
 		Main_HostServerButton.onClick.AddListener(StartServer);
@@ -168,13 +171,16 @@ public class MainMenuManager : MonoBehaviour {
 			//TODO do we need start button at all? just starting immediately for now
 			// Enable start button
 			//Hosting_StartButton.interactable = true;
-			DisableAllCanvasPanels();
-			MenuPlane.SetActive (false);
+			//DisableAllCanvasPanels();
+			//MenuPlane.SetActive (false);
 			StartGame();
 		}
 
 	}
 	void StartGame() {
+		DisableAllCanvasPanels();
+		MinimapPlane.SetActive (true);
+		MenuPlane.SetActive (false);
 		SpawnPlayer();
 		GenerateWorld();
 		//textDisplay = GetComponent<Canvas> ().GetComponent<"CenterText">;
@@ -183,8 +189,8 @@ public class MainMenuManager : MonoBehaviour {
 	private void JoinServer(HostData hostData)
 	{
 		//Debug.Log ("Joining server!");
-		DisableAllCanvasPanels ();
-		MenuPlane.SetActive (false);
+		//DisableAllCanvasPanels ();
+		//MenuPlane.SetActive (false);
 		Network.Connect(hostData);
 	}
 	
