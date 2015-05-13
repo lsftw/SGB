@@ -7,10 +7,10 @@ public class SharedData : MonoBehaviour {
 	int theirScore = 0;
 
 
-	public void registerWin(){
+	public void win(){
 		myScore += 1;
 	}
-	public void registerLose(){
+	public void lose(){
 		theirScore += 1;
 	}
 	public int getMyScore(){
@@ -20,11 +20,13 @@ public class SharedData : MonoBehaviour {
 		return theirScore;
 	}
 
-	[RPC] void lose(){
-		registerLose ();
+	[RPC] public void registerLose(){
+		Debug.Log ("lose RPC, myscore=" + myScore);
+		lose ();
 	}
-	[RPC] void win(){
-		registerWin ();
+	[RPC] public void registerWin(){
+		Debug.Log ("win RPC, myscore=" + myScore);
+		win ();
 	}
 
 	/*

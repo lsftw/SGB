@@ -129,11 +129,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			} else {
 				Debug.Log("You won!");
 				GameObject.FindGameObjectWithTag("SharedData").GetComponent<SharedData>().registerWin();
+
 				//myScore++;
 				//win();
 				//textUpdater.GetComponent<TextUpdater>().registerWin();
 			}
-			gameObject.transform.position = new Vector3(0, 100, 0);
+			gameObject.transform.position = new Vector3(0, 100, 0); //teleport player up 
 		}	
 		/*
 		[RPC] void lose(NetworkViewID theirID){

@@ -36,9 +36,7 @@ public class TextUpdater : MonoBehaviour {
 		if (GetSharedData () != null) { //should never be null after game starts
 			Player1Score.text = "My Score: " + GetSharedData ().GetComponent<SharedData> ().getMyScore ();
 			Player2Score.text = "Opponent's Score: " + GetSharedData ().GetComponent<SharedData> ().getTheirScore (); 
-		} else {
-			Debug.Log("Shared data is null!");
-		}
+		} 
 	}
 
 	private GameObject GetLocalPlayer() {
