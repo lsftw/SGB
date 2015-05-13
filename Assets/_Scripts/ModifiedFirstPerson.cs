@@ -94,7 +94,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void Update()
         {
 			if (GetComponent<NetworkView> ().isMine) {
-				//TODO test if this needs to be in if
 				RotateView ();
 			
 				// the jump state needs to read here to make sure it is not missed
@@ -113,8 +112,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				}
 
 				m_PreviouslyGrounded = m_CharacterController.isGrounded;
-
-				// HandleMouseClick();
 			}
         }
 
@@ -145,45 +142,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 		}
 		*/
-
-		private void ChangeColor(Vector3 color) {
-			GetComponentInChildren<Renderer>().material.color = new Color(color.x, color.y, color.z, 1f);
-		}
-
-/* 		private void HandleMouseClick() {
-			//CODE FOR DESTROYING BLOCKS 
-			// - NOTE: code involving mouse clicks is updated per frame, so this belongs in Update()
-			// - NOTE: may have to propogate physics over to FixedUpdate if we want to add any...
-			// - For now, testing with raycast for individual blocks that mouse is over (ie player looking at)
-			// - May need to implement a cooldown between clicks/successful destroy commands
-			const int MAX_DISTANCE = 5;
-			RaycastHit objectHit;
-			Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
-			if (Input.GetMouseButtonDown(0) && Physics.Raycast(ray, out objectHit, MAX_DISTANCE)){
-				//if they left click, objectHit will have the targeted object's data
-				GameObject block = objectHit.collider.gameObject;
-				DestroyEntity(block);
-			}
-		}
-
-		// old non-rpc version
-		// void DestroyBlockAtCursor(GameObject block) {
-			// block.SetActive(false);
-		// }
-
-		void DestroyEntity(GameObject entity) {
-			// only allow destroying blocks
-			if (entity.tag == "Block") { // YOU CAN USE == FOR STRING EQUALITY C# MVP
-				DestroyBlock(entity.GetComponent<NetworkView>().viewID);
-			}
-		}
-		[RPC] void DestroyBlock(NetworkViewID blockId) {
-			//block.SetActive(false);
-			Network.Destroy(blockId);
-			// if (GetComponent<NetworkView>().isMine)
-				// GetComponent<NetworkView>().RPC("DestroyBlockAtCursor", RPCMode.OthersBuffered, blockId);
-		} */
-
 
         private void PlayLandingSound()
         {
