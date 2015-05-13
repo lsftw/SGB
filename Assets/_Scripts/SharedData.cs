@@ -34,7 +34,7 @@ public class SharedData : MonoBehaviour {
 		GetComponent<NetworkView>().RPC ("lose", RPCMode.Others);
 		win ();
 	}*/
-
+	/*
 	void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info) {
 		if (stream.isWriting) {
 			stream.Serialize(ref theirScore);
@@ -43,5 +43,5 @@ public class SharedData : MonoBehaviour {
 			Debug.Log("receiving shared myScore = " + myScore);
 			stream.Serialize(ref myScore);
 		}
-	}
+	}*/
 }
