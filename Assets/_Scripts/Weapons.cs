@@ -30,11 +30,11 @@ public class Weapons : MonoBehaviour {
 	}
 	public Weapons() {
 		ammo.Add(Weapon.HAND, -1);
-		COOLDOWNS.Add(Weapon.HAND, .25);
+		COOLDOWNS.Add(Weapon.HAND, .2);
 		ammo.Add(Weapon.DRILL, -1);
-		COOLDOWNS.Add(Weapon.DRILL, .35);
-		ammo.Add(Weapon.PELLET, 300);
-		COOLDOWNS.Add(Weapon.PELLET, .5);
+		COOLDOWNS.Add(Weapon.DRILL, .3);
+		ammo.Add(Weapon.PELLET, 425);
+		COOLDOWNS.Add(Weapon.PELLET, .4);
 		ammo.Add(Weapon.CODE425, 2);
 		COOLDOWNS.Add(Weapon.CODE425, 60);
 		ammo.Add(Weapon.ICARUS, -1);
