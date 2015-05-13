@@ -125,7 +125,6 @@ public class MainMenuManager : MonoBehaviour {
 			waitingForAnotherPlayer = true;
 			//Hosting_StartButton.interactable = false; //can't click start until another player joins
 			//GUI.Text(new Rect(200, 200, 250, 100), "Start Server");
-			//
 		} /*else {
 			StartGame();
 		}*/
@@ -187,8 +186,6 @@ public class MainMenuManager : MonoBehaviour {
 			//Else is unnecessary - game starts immediately...
 			waitingOnPlayersText.text = "Player connected, ready to start.";
 		}*/
-		//
-		//
 	}
 	private void SwitchToJoin(){
 		DisplayCanvas (Joining_Canvas_Panel);
