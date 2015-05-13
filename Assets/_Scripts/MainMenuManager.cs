@@ -18,6 +18,8 @@ public class MainMenuManager : MonoBehaviour {
 	
 	public GameObject worldGeneratorPrefab;
 	public GameObject playerPrefab;
+	public GameObject SharedNetworkData;
+
 	public Text waitingOnPlayersText;
 
 	public GameObject Main_Canvas_Panel;
@@ -37,8 +39,6 @@ public class MainMenuManager : MonoBehaviour {
 
 	public GameObject MenuPlane;
 	public GameObject MinimapPlane;
-
-	public GameObject SharedNetworkData;
 
 	void DisableAllCanvasPanels() {
 		DisablePanel (Game_Panel);
@@ -144,7 +144,7 @@ public class MainMenuManager : MonoBehaviour {
 	}
 	void StartGame() {
 		if (Network.isServer) {
-			//Network.Instantiate(SharedNetworkData, new Vector3(0,0,0), Quaternion.identity, 0);
+			Network.Instantiate(SharedNetworkData, new Vector3(0,0,0), Quaternion.identity, 0);
 		}
 		DisableAllCanvasPanels();
 		MinimapPlane.SetActive (true);
