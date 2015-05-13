@@ -30,13 +30,13 @@ public class Weapons : MonoBehaviour {
 	}
 	public Weapons() {
 		ammo.Add(Weapon.HAND, -1);
-		COOLDOWNS.Add(Weapon.HAND, .25);
+		COOLDOWNS.Add(Weapon.HAND, .2);
 		ammo.Add(Weapon.DRILL, -1);
-		COOLDOWNS.Add(Weapon.DRILL, .35);
-		ammo.Add(Weapon.PELLET, 300);
-		COOLDOWNS.Add(Weapon.PELLET, .5);
-		ammo.Add(Weapon.CODE425, 1);
-		COOLDOWNS.Add(Weapon.CODE425, 5);
+		COOLDOWNS.Add(Weapon.DRILL, .3);
+		ammo.Add(Weapon.PELLET, 425);
+		COOLDOWNS.Add(Weapon.PELLET, .4);
+		ammo.Add(Weapon.CODE425, 2);
+		COOLDOWNS.Add(Weapon.CODE425, 60);
 		ammo.Add(Weapon.ICARUS, -1);
 		COOLDOWNS.Add(Weapon.ICARUS, 30);
 		foreach (Weapon weapon in GetAllWeapons()) {
@@ -59,11 +59,17 @@ public class Weapons : MonoBehaviour {
 	// Used for GUI text display of selected weapon
 	public string GetWeaponDescription() {
 		string weaponName = selectedWeapon.ToString();
-		string ammoText = ammo[selectedWeapon].ToString();
+		string ammoText = " x" + ammo[selectedWeapon].ToString();
+		string cdText = cooldown[selectedWeapon].ToString("n1");
 		if (ammo[selectedWeapon] < 0) { // negative = unlimited ammo
-			return string.Format("{0}", weaponName);
+			ammoText = "";
 		}
-		return string.Format("{0} x{1}", weaponName, ammoText);
+		if (cooldown[selectedWeapon] <= 0) {
+			cdText = "";
+		} else {
+			cdText = " [" + cdText + "s]";
+		}
+		return string.Format("{0}{1}{2}", weaponName, ammoText, cdText);
 	}
 	// TODO use constructor instead? Camera is mandatory for raycasting
 	public void setCamera(Camera raycastCamera) {
