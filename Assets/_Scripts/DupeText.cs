@@ -11,9 +11,9 @@ public class DupeText : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		/*shadowUp.text = original.text;
+		shadowUp.text = original.text;
 		shadowDown.text = original.text;
 		shadowRight.text = original.text;
-		shadowLeft.text = original.text;*/
+		shadowLeft.text = original.text;
 	}
 }
