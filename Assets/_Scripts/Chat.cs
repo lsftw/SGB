@@ -50,7 +50,7 @@ public class Chat : MonoBehaviour {
 		foreach (char c in Input.inputString) {
 			if (c == '\b') {
 				if (curText3.Length != 0) {
-					curText3 = curText3.Substring(0, curText.Length - 1);
+					curText3 = curText3.Substring(0, curText3.Length - 1);
 				}
 			} else {
 				if (c == '\n' || c == '\r') {
@@ -60,7 +60,9 @@ public class Chat : MonoBehaviour {
 					}
 					typing = !typing;
 				} else {
-					curText3 += c;
+					if (typing) {
+						curText3 += c;
+					}
 				}
 			}
 		}
@@ -77,9 +79,8 @@ public class Chat : MonoBehaviour {
 		curText1 = curText2;
 		curText2 = curText3;
 		curText3 = text;
-		text = curText + "\n" +  curText1 + "\n" + curText2 + "\n" + curText3;
+		text = curText + "\n" +  curText1 + "\n" + curText2 + "\n" + curText3;*/
 		//chatDisplay.text += text + '\n' ;
 		chatDisplay.text = text;
-
 	}
 }
