@@ -87,13 +87,6 @@ public class MainMenuManager : MonoBehaviour {
 		Joining_CancelButton.onClick.AddListener (CancelJoin);
 		Joining_RefreshHostsButton.onClick.AddListener(RefreshHostList);
 	}
-	void Update() {
-		if (Input.GetKeyDown(KeyCode.KeypadEquals)) {
-			Debug.Log ("= REAL 2-PLAYER GAME");
-			ROOM_NAMES = new string[]{"Real Game"};
-			maxPlayers = 2;
-		}
-	}
 	void Quit (){
 		Application.Quit ();
 	}
@@ -180,6 +173,11 @@ public class MainMenuManager : MonoBehaviour {
 	}
 	
 	void Update() {
+		if (Input.GetKeyDown(KeyCode.KeypadEquals)) {
+			Debug.Log ("= REAL 2-PLAYER GAME");
+			ROOM_NAMES = new string[]{"Real Game"};
+			maxPlayers = 2;
+		}
 		//if (Hosting_Canvas_Panel.activeSelf) {
 		if (isRefreshingHostList && MasterServer.PollHostList ().Length > 0) {
 			isRefreshingHostList = false;
