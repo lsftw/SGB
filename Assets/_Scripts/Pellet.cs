@@ -4,7 +4,7 @@ using System.Linq;
 
 public class Pellet : Projectile {
 	public float maxSpeed = 30;
-	public float explosionRadius = .1f;
+	public float explosionRadius = 1.425f;
 	public override float GetMaxSpd() {
 		return maxSpeed;
 	}
