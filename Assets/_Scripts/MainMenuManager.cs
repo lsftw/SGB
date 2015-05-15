@@ -5,8 +5,8 @@ using System.Collections;
 public class MainMenuManager : MonoBehaviour {
 	
 	private const string GAME_NAME = "SGB";
-	private string[] ROOM_NAMES = {"coaxed-into-a-snafu", "on-the-ruse-cruise", "busted-your-trust",
-		"%ERR_MISSING_ROOM_NAME%"};
+	private string[] ROOM_NAMES = {"coaxed-into-a-snafu", "on-the-ruse-cruise", "busted-your-trust"};
+	//,		"%ERR_MISSING_ROOM_NAME%"};
 	private string roomName;
 	private int maxPlayers = 8;
 
