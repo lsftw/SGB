@@ -79,7 +79,7 @@ public class Chat : MonoBehaviour {
 		curText1 = curText2;
 		curText2 = curText3;
 		curText3 = text;
-		text = curText + "\n" +  curText1 + "\n" + curText2 + "\n" + curText3;*/
+		text = curText + "\n" +  curText1 + "\n" + curText2 + "\n" + curText3;
 		//chatDisplay.text += text + '\n' ;
 		chatDisplay.text = text;
 	}
