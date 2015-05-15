@@ -125,9 +125,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				//textUpdater.GetComponent<TextUpdater>().registerLose();
 				gameObject.transform.position = new Vector3(0, 100, 0); //teleport player up 
 				gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
-				antigravityTimer = 5.00F;
+				antigravityTimer = 2.00F;
 				oldGravityMultiplier = m_GravityMultiplier;
 				m_GravityMultiplier = 0;
+				m_MoveDir.y = 0; //no falling for you
 				//gameObject.GetComponent<Rigidbody> ().useGravity = false;
 
 			}/* else {
