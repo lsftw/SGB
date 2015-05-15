@@ -4,9 +4,16 @@ using System.Collections;
 
 public class Chat : MonoBehaviour {
 	public Text chatDisplay;
+
+	//Rollin' our own queue of strings
 	private string curText = "";
+	private string curText1 = "";
+	private string curText2 = "";
+	private string curText3 = "";
 //	private bool writingText = false;
 
+
+	private bool typing = false;
 	// Use this for initialization
 	void Start () {
 	
@@ -42,15 +49,18 @@ public class Chat : MonoBehaviour {
 		// }
 		foreach (char c in Input.inputString) {
 			if (c == '\b') {
-				if (curText.Length != 0) {
-					curText = curText.Substring(0, curText.Length - 1);
+				if (curText3.Length != 0) {
+					curText3 = curText3.Substring(0, curText.Length - 1);
 				}
 			} else {
 				if (c == '\n' || c == '\r') {
-					SayText(curText);
-					curText = "";
+					if (typing){
+						SayText(curText3);
+						curText3 = "";
+					}
+					typing = !typing;
 				} else {
-					curText += c;
+					curText3 += c;
 				}
 			}
 		}
@@ -63,7 +73,13 @@ public class Chat : MonoBehaviour {
 	}
 	[RPC] void UpdateText(string text) {
 		Debug.Log(text);
-		// chatDisplay.text += text + '\n';
+		curText = curText1; 
+		curText1 = curText2;
+		curText2 = curText3;
+		curText3 = text;
+		text = curText + "\n" +  curText1 + "\n" + curText2 + "\n" + curText3;
+		//chatDisplay.text += text + '\n' ;
 		chatDisplay.text = text;
+
 	}
 }
