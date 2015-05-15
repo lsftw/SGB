@@ -34,8 +34,8 @@ public class Weapons : MonoBehaviour {
 		ammo.Add(Weapon.DRILL, -1);
 		COOLDOWNS.Add(Weapon.DRILL, .25);
 		ammo.Add(Weapon.PELLET, 425);
-		COOLDOWNS.Add(Weapon.PELLET, .35);
-		ammo.Add(Weapon.CODE425, 3);
+		COOLDOWNS.Add(Weapon.PELLET, .25);
+		ammo.Add(Weapon.CODE425, 6);
 		COOLDOWNS.Add(Weapon.CODE425, 45);
 		ammo.Add(Weapon.ICARUS, -1);
 		COOLDOWNS.Add(Weapon.ICARUS, 25);
