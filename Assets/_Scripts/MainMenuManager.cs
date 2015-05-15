@@ -8,7 +8,7 @@ public class MainMenuManager : MonoBehaviour {
 	private string[] ROOM_NAMES = {"coaxed-into-a-snafu", "on-the-ruse-cruise", "busted-your-trust",
 		"%ERR_MISSING_ROOM_NAME%"};
 	private string roomName;
-	private const int MAX_PLAYERS = 5;
+	private int maxPlayers = 8;
 
 	// if true, waits for a client to connect to server before initializing game
 	// necessary for multiplayer Network.Instantiate of block world to work
@@ -56,7 +56,6 @@ public class MainMenuManager : MonoBehaviour {
 		foreach (Transform t in tarr) {
 			t.gameObject.SetActive(false);
 		}
-		//
 	}
 
 	void DisplayCanvas(GameObject panel) {
@@ -84,12 +83,16 @@ public class MainMenuManager : MonoBehaviour {
 		Hosting_CancelButton.onClick.AddListener (CloseServer);
 		//Hosting_StartButton.onClick.AddListener (StartGame);
 		//Hosting_StartButton.interactable = false;
-		//
+
 		Joining_CancelButton.onClick.AddListener (CancelJoin);
 		Joining_RefreshHostsButton.onClick.AddListener(RefreshHostList);
-		//
-		//
-		//
+	}
+	void Update() {
+		if (Input.GetKeyDown(KeyCode.KeypadEquals)) {
+			Debug.Log ("= REAL 2-PLAYER GAME");
+			ROOM_NAMES = new string[]{"Real Game"};
+			maxPlayers = 2;
+		}
 	}
 	void Quit (){
 		Application.Quit ();
@@ -109,14 +112,13 @@ public class MainMenuManager : MonoBehaviour {
 			}
 		}
 	}
-	private string getRandomRoomName()
-	{
+	private string getRandomRoomName() {
 		return ROOM_NAMES[Random.Range(0, ROOM_NAMES.Length)];
 	}
 	private void StartServer() {
 		roomName = getRandomRoomName();
 		gameNameText.text = "\"" + roomName + "\"";
-		Network.InitializeServer(MAX_PLAYERS, 25000, !Network.HavePublicAddress());
+		Network.InitializeServer(maxPlayers, 25000, !Network.HavePublicAddress());
 		MasterServer.RegisterHost(GAME_NAME, roomName);
 		DisplayCanvas (Hosting_Canvas_Panel);
 		//Hosting_StartButton.interactable = false;
