@@ -193,19 +193,12 @@ public class Weapons : MonoBehaviour {
 
 	void DestroyEntity(GameObject entity) {
 		// only allow destroying blocks
-
-		//
-		//
-		//Debug.Log ("destroy entity!");
-		//Debug.Log (entity.gameObject.GetComponent<ModifiedFirstPerson> () != null);
 		if (entity.tag == "Block") { // YOU CAN USE == FOR STRING EQUALITY C# MVP
 			DestroyBlock (entity.GetComponent<NetworkView> ().viewID);
 		} else if (entity.gameObject.GetComponent<ModifiedFirstPerson>() != null) {
 			//Debug.Log ("hit player!");
 			KnockbackPlayer(entity.GetComponent<NetworkView>().viewID, 1000);
 		}
-		//
-		//
 	}
 	[RPC] void KnockbackPlayer(NetworkViewID playerID, int force){
 		//TODO not working yet!

@@ -27,8 +27,6 @@ public class GenerateBlockWorld : MonoBehaviour {
 		GenerateWorld();
 	}
 	bool ShouldGenerate() {
-		// Debug.Log("isServer:" + Network.isServer);
-		// Debug.Log("isClient:" + Network.isClient);
 		return Network.isServer;
 	}
 	void GenerateWorld() {
@@ -52,7 +50,6 @@ public class GenerateBlockWorld : MonoBehaviour {
 	private void GenerateBlock(Vector3 position, Transform parent) {
 		//GameObject box = (GameObject)Instantiate(prefabBlock, position, Quaternion.identity);
 		GameObject box = (GameObject)Network.Instantiate(prefabBlock, position, Quaternion.identity, 0);
-		//box.transform.position = position;
 		box.transform.parent = parent;
 	}
 	private void GeneratePrimitiveBlock(Vector3 position, Transform parent) {
