@@ -51,7 +51,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 		private Vector3 syncMoveDir;
 		//private CharacterController syncCharacterController;
 		private Weapons weapons;
-		private float antigravityTimer = 0;
+		private float antigravityTimer = 0.00F;
+		private float oldGravityMultiplier;
 		//int myScore = 0;
 		//int theirScore = 0;
 
@@ -125,7 +126,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				gameObject.transform.position = new Vector3(0, 100, 0); //teleport player up 
 				gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (0, 0, 0);
 				antigravityTimer = 5.00F;
-				gameObject.GetComponent<Rigidbody> ().useGravity = false;
+				oldGravityMultiplier = m_GravityMultiplier;
+				m_GravityMultiplier = 0;
+				//gameObject.GetComponent<Rigidbody> ().useGravity = false;
+
 			}/* else {
 				Debug.Log("You won!");
 				GameObject.FindGameObjectWithTag("SharedData").GetComponent<SharedData>().registerWin();
@@ -134,7 +138,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				//win();
 				//textUpdater.GetComponent<TextUpdater>().registerWin();
 			}*/
-
+			//
+			///
 		}	
 		/*
 		[RPC] void lose(NetworkViewID theirID){
@@ -195,7 +200,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				}
 				if (antigravityTimer < 0){
 					antigravityTimer = 0;
-					gameObject.GetComponent<Rigidbody>().useGravity = true;
+					m_GravityMultiplier = oldGravityMultiplier;
+					//gameObject.GetComponent<Rigidbody>().useGravity = true; //doesn't do anything
 				}
 			} else {
 				//Debug.Log ("NOT MY VIEW!");
