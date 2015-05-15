@@ -30,15 +30,15 @@ public class Weapons : MonoBehaviour {
 	}
 	public Weapons() {
 		ammo.Add(Weapon.HAND, -1);
-		COOLDOWNS.Add(Weapon.HAND, .2);
+		COOLDOWNS.Add(Weapon.HAND, .15);
 		ammo.Add(Weapon.DRILL, -1);
-		COOLDOWNS.Add(Weapon.DRILL, .3);
+		COOLDOWNS.Add(Weapon.DRILL, .25);
 		ammo.Add(Weapon.PELLET, 425);
-		COOLDOWNS.Add(Weapon.PELLET, .4);
-		ammo.Add(Weapon.CODE425, 2);
-		COOLDOWNS.Add(Weapon.CODE425, 60);
+		COOLDOWNS.Add(Weapon.PELLET, .35);
+		ammo.Add(Weapon.CODE425, 3);
+		COOLDOWNS.Add(Weapon.CODE425, 45);
 		ammo.Add(Weapon.ICARUS, -1);
-		COOLDOWNS.Add(Weapon.ICARUS, 30);
+		COOLDOWNS.Add(Weapon.ICARUS, 25);
 		foreach (Weapon weapon in GetAllWeapons()) {
 			cooldown.Add(weapon, 0);
 		}
