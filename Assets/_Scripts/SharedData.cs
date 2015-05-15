@@ -24,8 +24,6 @@ public class SharedData : MonoBehaviour {
 		theirScore += 1;
 	}
 	public void registerLose(){
-		Debug.Log ("I lost, send win RPC to others, myscore=" + myScore);
-		
 		GetComponent<NetworkView>().RPC ("win", RPCMode.Others);
 		lose ();
 	}/*

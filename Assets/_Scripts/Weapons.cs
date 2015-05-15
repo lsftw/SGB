@@ -93,9 +93,10 @@ public class Weapons : MonoBehaviour {
 	}
 
 	private void HandleWeaponSwap() {
-		if (Input.GetKeyDown(KeyCode.Q)) { // previous weapon
+		float weaponSwitch = Input.GetAxisRaw("Mouse ScrollWheel");
+		if (Input.GetKeyDown(KeyCode.Q) || weaponSwitch >= 0.1) { // previous weapon
 			selectedWeapon = selectedWeapon.Prev();
-		} else if (Input.GetKeyDown(KeyCode.E)) { // next weapon
+		} else if (Input.GetKeyDown(KeyCode.E) || weaponSwitch <= -0.1) { // next weapon
 			selectedWeapon = selectedWeapon.Next();
 		}
 	}
