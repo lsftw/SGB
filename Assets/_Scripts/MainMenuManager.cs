@@ -5,7 +5,9 @@ using System.Collections;
 public class MainMenuManager : MonoBehaviour {
 	
 	private const string GAME_NAME = "SGB";
-	private const string ROOM_NAME = "coaxed-into-a-snafu";
+	private string[] ROOM_NAMES = {"coaxed-into-a-snafu", "on-the-ruse-cruise", "busted-your-trust",
+		"%ERR_MISSING_ROOM_NAME%"};
+	private string roomName;
 
 	// if true, waits for a client to connect to server before initializing game
 	// necessary for multiplayer Network.Instantiate of block world to work
@@ -21,6 +23,7 @@ public class MainMenuManager : MonoBehaviour {
 	public GameObject SharedNetworkData;
 
 	public Text waitingOnPlayersText;
+	public Text gameNameText;
 
 	public GameObject Main_Canvas_Panel;
 	public GameObject Hosting_Canvas_Panel;
@@ -96,7 +99,7 @@ public class MainMenuManager : MonoBehaviour {
 			if (!Network.isClient && !Network.isServer) {
 				if (hostList != null) {
 					for (int i = 0; i < hostList.Length; i++) {
-						if (GUI.Button (new Rect (600, 110 + (110 * i), 250, 100), hostList [i].gameName)){
+						if (GUI.Button (new Rect (600, 110 + (80 * i), 250, 70), hostList [i].gameName)){
 							DisableAllCanvasPanels ();
 							JoinServer (hostList [i]);
 						}
@@ -105,9 +108,15 @@ public class MainMenuManager : MonoBehaviour {
 			}
 		}
 	}
+	private string getRandomRoomName()
+	{
+		return ROOM_NAMES[Random.Range(0, ROOM_NAMES.Length)];
+	}
 	private void StartServer() {
+		roomName = getRandomRoomName();
+		gameNameText.text = "\"" + roomName + "\"";
 		Network.InitializeServer(5, 25000, !Network.HavePublicAddress());
-		MasterServer.RegisterHost(GAME_NAME, ROOM_NAME);
+		MasterServer.RegisterHost(GAME_NAME, roomName);
 		DisplayCanvas (Hosting_Canvas_Panel);
 		//Hosting_StartButton.interactable = false;
 	}
@@ -179,8 +188,6 @@ public class MainMenuManager : MonoBehaviour {
 	}
 	void UpdateGuiText() {
 		if (WAIT_FOR_TWO_PLAYERS && waitingForAnotherPlayer) {
-			//waitingOnPlayersText.text = "Waiting for another player to connect...\n" + 
-			//	"Your Room Name: " + ROOM_NAME;
 			waitingOnPlayersText.text = "Game will start when another player connects.";
 		} /*else {
 			//Else is unnecessary - game starts immediately...
