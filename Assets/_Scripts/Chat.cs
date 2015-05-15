@@ -75,11 +75,13 @@ public class Chat : MonoBehaviour {
 	}
 	[RPC] void UpdateText(string text) {
 		Debug.Log(text);
+		/*
 		curText = curText1; 
 		curText1 = curText2;
 		curText2 = curText3;
 		curText3 = text;
 		text = curText + "\n" +  curText1 + "\n" + curText2 + "\n" + curText3;
+		 */
 		//chatDisplay.text += text + '\n' ;
 		chatDisplay.text = text;
 	}
