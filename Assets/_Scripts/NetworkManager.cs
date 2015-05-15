@@ -13,6 +13,7 @@ using System.Collections;
 public class NetworkManager : MonoBehaviour
 {
     private const string GAME_NAME = "SGB";
+	private const int MAX_PLAYERS = 5;
     private string[] ROOM_NAMES = {"coaxed-into-a-snafu", "on-the-ruse-cruise", "busted-your-trust"};
 	private string roomName;
 
@@ -57,11 +58,8 @@ public class NetworkManager : MonoBehaviour
     private void StartServer()
     {
 		roomName = getRandomRoomName();
-        Network.InitializeServer(5, 25000, !Network.HavePublicAddress());
+        Network.InitializeServer(MAX_PLAYERS, 25000, !Network.HavePublicAddress());
         MasterServer.RegisterHost(GAME_NAME, roomName);
-		//
-		//
-
     }
 
     void OnServerInitialized()

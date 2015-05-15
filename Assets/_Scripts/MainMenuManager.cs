@@ -8,6 +8,7 @@ public class MainMenuManager : MonoBehaviour {
 	private string[] ROOM_NAMES = {"coaxed-into-a-snafu", "on-the-ruse-cruise", "busted-your-trust",
 		"%ERR_MISSING_ROOM_NAME%"};
 	private string roomName;
+	private const int MAX_PLAYERS = 5;
 
 	// if true, waits for a client to connect to server before initializing game
 	// necessary for multiplayer Network.Instantiate of block world to work
@@ -115,7 +116,7 @@ public class MainMenuManager : MonoBehaviour {
 	private void StartServer() {
 		roomName = getRandomRoomName();
 		gameNameText.text = "\"" + roomName + "\"";
-		Network.InitializeServer(5, 25000, !Network.HavePublicAddress());
+		Network.InitializeServer(MAX_PLAYERS, 25000, !Network.HavePublicAddress());
 		MasterServer.RegisterHost(GAME_NAME, roomName);
 		DisplayCanvas (Hosting_Canvas_Panel);
 		//Hosting_StartButton.interactable = false;
