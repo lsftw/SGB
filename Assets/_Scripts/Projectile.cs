@@ -28,7 +28,7 @@ public abstract class Projectile : MonoBehaviour {
 				Network.Destroy(block);
 			}
 		}
-		Destroy(gameObject);
+		Network.Destroy(gameObject);
 	}
 	
 	System.Collections.Generic.IEnumerable<GameObject> GetAllInRange(GameObject centerObject, float radius) {
