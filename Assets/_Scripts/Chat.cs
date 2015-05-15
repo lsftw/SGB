@@ -6,9 +6,9 @@ public class Chat : MonoBehaviour {
 	public Text chatDisplay;
 
 	//Rollin' our own queue of strings
-	private string curText = "";
-	private string curText1 = "";
-	private string curText2 = "";
+	// private string curText = "";
+	// private string curText1 = "";
+	// private string curText2 = "";
 	private string curText3 = "";
 //	private bool writingText = false;
 
